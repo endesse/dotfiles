@@ -1,0 +1,2 @@
+[2020-11-01 00:26:29.166] [sharedprocess] [info] main {"machineId":"edc758122387e4f20dc9415248d25c37a30bfb433d58adba53e4dd4d9dffe418","windowId":2}
+[2020-11-01 00:26:29.249] [sharedprocess] [error] [File Watcher (node.js)] Error: ENOENT: no such file or directory, stat '/home/endesse/.config/Code - OSS/User/snippets'
