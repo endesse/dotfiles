@@ -17,14 +17,17 @@ import qualified Data.Map as M
 -- Hooks
 import XMonad.Hooks.ManageDocks
 import XMonad.Hooks.SetWMName
+import XMonad.Hooks.DynamicLog
+import XMonad.Hooks.WorkspaceHistory
+import XMonad.Hooks.FadeInactive
 
 -- Utilities
 import XMonad.Util.SpawnOnce
+import XMonad.Util.Run
 
 -- Layout Imports
 
 import XMonad.Layout.Spacing (spacing)
-
 
 -- Set the preferred terminal program, which is used in a binding below
 -- and by certain contrib modules.
@@ -64,7 +67,17 @@ myModMask = mod1Mask
 -- > workspaces = ["web", "irc", "code"] ++ map show [4..9]
 --
 
-myWorkspaces = ["1","2","3","4","5","6","7","8","9"]
+xmobarEscape :: String -> String
+xmobarEscape = concatMap doubleLts
+	where
+		doubleLts '<' = "<<"
+		doubleLts x = [x]
+
+myWorkspaces :: [String]
+myWorkspaces = clickable . (map xmobarEscape)
+		$ ["1","2","3","4","5","6","7","8","9"]
+	where
+		clickable l = [ "<action=xdotool key super+" ++ show (n) ++ "> " ++ ws ++ "</action>" | (i,ws) <- zip [1..9] l, let n = i ]
 
 -- Border colors for unfocused and focused windows, respectively.
 --
@@ -263,14 +276,6 @@ myManageHook = composeAll
 myEventHook = mempty
 
 ------------------------------------------------------------------------
--- Status bars and logging
-
--- Perform an arbitary action on each internal state change or X event.
--- See the 'XMonad.Hooks.DynamicLog' extension for examples.
---
-myLogHook = return ()
-
-------------------------------------------------------------------------
 -- Startup hook
 
 -- Perform an arbitary action each time xmonad starts or is restarted
@@ -283,6 +288,7 @@ myStartupHook = do
     spawnOnce "urxvtd &"
     spawnOnce "nitrogen --restore &"
     spawnOnce "picom &"
+    spawnOnce "pcmanfm -d &"
     setWMName "LG3D"
 
 
@@ -291,7 +297,20 @@ myStartupHook = do
 
 -- Run xmonad with the settings you specify. No need to modify this.
 --
-main = xmonad defaults
+main = do 
+	xmproc <- spawnPipe "xmobar -x 0 /home/endesse/.config/xmobar/xmobarrc"
+	xmonad $ docks defaults
+
+------------------------------------------------------------------------
+-- Status bars and logging
+
+-- Perform an arbitary action on each internal state change or X event.
+-- See the 'XMonad.Hooks.DynamicLog' extension for examples.
+--
+
+myLogHook :: X ()
+myLogHook = fadeInactiveLogHook fadeAmount
+	where fadeAmount = 1.0
 
 -- A structure containing your configuration settings, overriding
 -- fields in the default config. Any you don't override, will
@@ -318,7 +337,19 @@ defaults = def {
 	layoutHook		= myLayouts,
 	manageHook		= myManageHook,
 	handleEventHook		= myEventHook,
-	logHook			= myLogHook,
+	logHook			= workspaceHistoryHook <+> myLogHook <+> dynamicLogWithPP xmobarPP
+					{ 
+				--	  ppOutput = \x -> hPutStrLn xmproc x	
+				--	,
+					ppCurrent = xmobarColor "#98be65" "" . wrap "[" "]"
+					, ppVisible = xmobarColor "#98be65" ""
+					, ppHidden = xmobarColor "82AAFF" "" . wrap "*" ""
+			 		, ppHiddenNoWindows = xmobarColor "#c792ea" ""
+					, ppTitle = xmobarColor "b3afc2" "" . shorten 60
+					, ppSep = "<fc=#666666> <fn=2>|</fn> </fc>"
+					, ppUrgent = xmobarColor "#C45500" "" . wrap "!" "!"
+					, ppOrder = \(ws:l:t:ex) -> [ws,l]++ex++[t]
+					},
 	startupHook		= myStartupHook
 }
 
