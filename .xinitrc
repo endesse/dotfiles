@@ -49,6 +49,4 @@ if [ -d /etc/X11/xinit/xinitrc.d ] ; then
 fi
 
 setxkbmap -layout pt
-nitrogen --restore &
-picom &
 exec xmonad
