@@ -5,19 +5,34 @@
 import XMonad
 import Data.Monoid
 import System.Exit
+import XMonad.Config.Desktop
+import XMonad.Layout.ResizableTile
+import XMonad.Layout.NoBorders
+import XMonad.Layout.Grid
+import XMonad.Layout.PerWorkspace (onWorkspace)
 
 import qualified XMonad.StackSet as W
-import qualified Data.Map	as M
+import qualified Data.Map as M
 
--- Bling Imports
+-- Hooks
+import XMonad.Hooks.ManageDocks
+import XMonad.Hooks.SetWMName
+import XMonad.Hooks.DynamicLog
+import XMonad.Hooks.WorkspaceHistory
+import XMonad.Hooks.FadeInactive
 
-import XMonad.Layout.Gaps	-- Create gaps between windows
+-- Utilities
+import XMonad.Util.SpawnOnce
+import XMonad.Util.Run
 
+-- Layout Imports
+
+import XMonad.Layout.Spacing (spacing)
 
 -- Set the preferred terminal program, which is used in a binding below
 -- and by certain contrib modules.
 
-myTerminal	= "rxvt-unicode"
+myTerminal = "urxvtc"
 
 -- Whether focus follows the mouse pointer.
 
@@ -31,7 +46,7 @@ myClickJustFocuses = False
 
 -- Width of the border in pixels.
 
-myBorderWidth	= 1 
+myBorderWidth = 1 
 
 -- modMask lets you specify which modkey to use
 --
@@ -40,7 +55,7 @@ myBorderWidth	= 1
 -- mod4Mask = "windows key"
 --
 
-myModMask	= mod1Mask
+myModMask = mod1Mask
 
 -- The default number of workspaces (virtual screens) and their names.
 -- By default we use numeric strings, but any string may be used as a
@@ -52,13 +67,23 @@ myModMask	= mod1Mask
 -- > workspaces = ["web", "irc", "code"] ++ map show [4..9]
 --
 
-myWorkspaces	= ["1","2","3","4","5","6","7","8","9"]
+xmobarEscape :: String -> String
+xmobarEscape = concatMap doubleLts
+	where
+		doubleLts '<' = "<<"
+		doubleLts x = [x]
+
+myWorkspaces :: [String]
+myWorkspaces = clickable . (map xmobarEscape)
+		$ ["1","2","3","4","5","6","7","8","9"]
+	where
+		clickable l = [ "<action=xdotool key super+" ++ show (n) ++ "> " ++ ws ++ "</action>" | (i,ws) <- zip [1..9] l, let n = i ]
 
 -- Border colors for unfocused and focused windows, respectively.
 --
 
-myNormalBorderColor	= "#dddddd"
-myFocusedBorderColor 	= "#51afef"
+myNormalBorderColor = "#dddddd"
+myFocusedBorderColor = "#51afef"
 
 -----------------------------------------------------------------------
 --Key bindings. Add, modify or remove key bindings here.
@@ -189,20 +214,35 @@ myMouseBindings (XConfig {XMonad.modMask = modm}) = M.fromList $
 -- The available layouts. Note that each layout is separated by |||,
 -- which denotes layout choice.
 --
+-- "avoidStruts" force the layouts to be bellow the bar (xmobar,polybar)
+--
 
-myLayout = tiled ||| Mirror tiled ||| Full
-	where
-		-- default tiling algorithm partitions the screen into two panes
-		tiled	= Tall nmaster delta ratio
+defaultLayouts = smartBorders(avoidStruts(
+    -- ResizableTall has a large master window on the left,
+    -- and remaining windows title on the right. By default each area
+    -- takes up half the screen, but you can resize using "super-h"and
+    -- "super-l"
+    spacing 2 $ ResizableTall 1 (3/100) (1/2) []
 
-		-- The default number of windows in the master pane
-		nmaster	= 1
+    -- Mirrored variation of ResizableTall.
+    ||| Mirror (ResizableTall 1 (3/100) (1/2) [])
 
-		-- Default proportion of screen occupied by master pane
-		ratio	= 1/2
+    -- Full layout makes every window full screen.
+    -- toggle window to bring it to fg
+    ||| noBorders Full
 
-		-- Percent of the screen to increment by when resizing panes
-		delta	= 3/100
+    -- Equaly distribute windows in space
+    ||| Grid ))
+
+-- If needed we may attribute a layout to a workspace
+-- fullLayout = smartborders(avoidStruts(noBorders Full))
+--
+{-
+myLayouts = onWorkspace "<WORKSPACE_NAME>" fullLayout
+    $ defaultLayouts
+-}
+
+myLayouts = defaultLayouts 
 
 ------------------------------------------------------------------------
 -- Window rules:
@@ -236,14 +276,6 @@ myManageHook = composeAll
 myEventHook = mempty
 
 ------------------------------------------------------------------------
--- Status bars and logging
-
--- Perform an arbitary action on each internal state change or X event.
--- See the 'XMonad.Hooks.DynamicLog' extension for examples.
---
-myLogHook = return ()
-
-------------------------------------------------------------------------
 -- Startup hook
 
 -- Perform an arbitary action each time xmonad starts or is restarted
@@ -251,14 +283,34 @@ myLogHook = return ()
 -- per-workspace layout choices.
 --
 -- By default, do nothing.
-myStartupHook = return ()
+myStartupHook :: X ()
+myStartupHook = do
+    spawnOnce "urxvtd &"
+    spawnOnce "nitrogen --restore &"
+    spawnOnce "picom &"
+    spawnOnce "pcmanfm -d &"
+    setWMName "LG3D"
+
 
 ------------------------------------------------------------------------
 -- Now run xmonad with all the defaults we set up.
 
 -- Run xmonad with the settings you specify. No need to modify this.
 --
-main = xmonad defaults
+main = do 
+	xmproc <- spawnPipe "xmobar -x 0 /home/endesse/.config/xmobar/xmobarrc"
+	xmonad $ docks defaults
+
+------------------------------------------------------------------------
+-- Status bars and logging
+
+-- Perform an arbitary action on each internal state change or X event.
+-- See the 'XMonad.Hooks.DynamicLog' extension for examples.
+--
+
+myLogHook :: X ()
+myLogHook = fadeInactiveLogHook fadeAmount
+	where fadeAmount = 1.0
 
 -- A structure containing your configuration settings, overriding
 -- fields in the default config. Any you don't override, will
@@ -279,13 +331,25 @@ defaults = def {
 
 	-- key bindings
 	keys			= myKeys,
-	mouseBindings		= myMouseBindings,
+	mouseBindings	= myMouseBindings,
 
 	-- hooks, layouts
-	layoutHook		= myLayout,
+	layoutHook		= myLayouts,
 	manageHook		= myManageHook,
 	handleEventHook		= myEventHook,
-	logHook			= myLogHook,
+	logHook			= workspaceHistoryHook <+> myLogHook <+> dynamicLogWithPP xmobarPP
+					{ 
+				--	  ppOutput = \x -> hPutStrLn xmproc x	
+				--	,
+					ppCurrent = xmobarColor "#98be65" "" . wrap "[" "]"
+					, ppVisible = xmobarColor "#98be65" ""
+					, ppHidden = xmobarColor "82AAFF" "" . wrap "*" ""
+			 		, ppHiddenNoWindows = xmobarColor "#c792ea" ""
+					, ppTitle = xmobarColor "b3afc2" "" . shorten 60
+					, ppSep = "<fc=#666666> <fn=2>|</fn> </fc>"
+					, ppUrgent = xmobarColor "#C45500" "" . wrap "!" "!"
+					, ppOrder = \(ws:l:t:ex) -> [ws,l]++ex++[t]
+					},
 	startupHook		= myStartupHook
 }
 
