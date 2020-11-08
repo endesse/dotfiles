@@ -146,18 +146,19 @@ spawnSelected' lst = gridselect conf lst >>= flip whenJust spawn
                    , gs_font         = myFont
                    }
 
-myAppGrid = [ ("Audacity", "audacity")
-                 , ("Deadbeef", "deadbeef")
-                 , ("Emacs", "emacsclient -c -a emacs")
+myAppGrid = [ ("Qutebrowser", "qutebrowser")
                  , ("Firefox", "firefox")
-                 , ("Geany", "geany")
-                 , ("Geary", "geary")
                  , ("Gimp", "gimp")
+		 , ("Krita", "krita")
+		 , ("Inkscape", "inkscape")
                  , ("Kdenlive", "kdenlive")
                  , ("LibreOffice Impress", "loimpress")
+		 , ("LibreOffice Math", "lomath")
                  , ("LibreOffice Writer", "lowriter")
                  , ("OBS", "obs")
-                 , ("PCManFM", "pcmanfm")
+		 , ("Discord", "discord")
+		 , ("Steam", "steam")
+		 , ("Visual Studio Code", "code")
                  ]
 
 treeselectAction :: TS.TSConfig (X ()) -> X ()
@@ -169,16 +170,16 @@ treeselectAction a = TS.treeselectAction a
        , Node (TS.TSNode "Virtualbox" "Oracle's virtualization program" (spawn "virtualbox")) []
        ]
    , Node (TS.TSNode "+ Pentest" "Pentesting tools" (return()))
-       [ Node (TS.TSNode "+ Cracking" (return()))
+       [ Node (TS.TSNode "+ Cracking" "Set of Cracking tools" (return()))
        		[ Node (TS.TSNode "Hydra" "Fast logon cracker" (spawn (myTerminal ++ " -e hydra"))) []
        		, Node (TS.TSNode "John" "Hash cracking" (spawn (myTerminal ++ " -e john"))) []
 		]
-       , Node (TS.TSNode "+ Enumeration" (return()))
+       , Node (TS.TSNode "+ Enumeration" "Tools for system and vulnerabilities enumerations" (return()))
 --       		[ Node (TS.TSNode "Dirbuster" "Brute Force Directory's" (spawn "dirbuster"))[]
-       		, Node (TS.TSNode "Gobuster" "Directory/file busting" (spawn (myTerminal ++ " -e gobuster"))) []
-       		, Node (TS.TSNode "Nmap" "Enumeration" (spawn (myTerminal ++ " -e nmap -h")))[]
+       		[ Node (TS.TSNode "Gobuster" "Directory/file busting" (spawn (myTerminal ++ " -e gobuster"))) []
+       		, Node (TS.TSNode "Nmap" "Enumeration" (spawn (myTerminal ++ " -e nmap -h"))) []
 		]
-       , Node (TS.TSNode "+ Exploit" (return()))
+       , Node (TS.TSNode "+ Exploit" "Tools for post exploitation" (return()))
        		[ Node (TS.TSNode "Exploit DB" "Exploit Database" (spawn (myTerminal ++ " -e searchsploit -h"))) []
        		, Node (TS.TSNode "Metasploit" "Exploit framework" (spawn (myTerminal ++ " -e msfconsole"))) []
 		]
@@ -290,16 +291,16 @@ treeselectAction a = TS.treeselectAction a
            ]
    , Node (TS.TSNode "+ Config Files" "config files that edit often" (return ()))
        [ Node (TS.TSNode "+ xmobar configs" "My xmobar config files" (return ()))
-           [ Node (TS.TSNode "xmobar mon1" "status bar on monitor 1" (spawn (myEditor ++ "/home/endesse/.config/xmobar/xmobarrc0"))) []
+           [ Node (TS.TSNode "xmobar mon1" "status bar on monitor 1" (spawn (myEditor ++ " -e vim /home/endesse/.config/xmobar/xmobarrc0"))) []
            ]
        , Node (TS.TSNode "+ xmonad configs" "My xmonad config files" (return ()))
-           [ Node (TS.TSNode "xmonad.hs" "My XMonad Main" (spawn (myEditor ++ "/home/endesse/.xmonad/xmonad.hs"))) []
+           [ Node (TS.TSNode "xmonad.hs" "My XMonad Main" (spawn (myEditor ++ " -e vim /home/endesse/.xmonad/xmonad.hs"))) []
            ]
-       , Node (TS.TSNode "bashrc" "the bourne again shell" (spawn (myEditor ++ "/home/endesse/.bashrc"))) []
-       , Node (TS.TSNode "bspwmrc" "binary space partitioning window manager" (spawn (myEditor ++ "/home/endesse/.config/bspwm/bspwmrc"))) []
-       , Node (TS.TSNode "dmenu config.h" "dynamic menu program" (spawn (myEditor ++ "/home/endesse/dmenu-distrotube/config.h"))) []
-       , Node (TS.TSNode "qutebrowser config.py" "qutebrowser web browser" (spawn (myEditor ++ "/home/endesse/.config/qutebrowser/config.py"))) []
-       , Node (TS.TSNode "xresources" "xresources file" (spawn (myEditor ++ "/home/endesse/.Xresources"))) []
+       , Node (TS.TSNode "bashrc" "the bourne again shell" (spawn (myEditor ++ " -e vim /home/endesse/.bashrc"))) []
+       , Node (TS.TSNode "bspwmrc" "binary space partitioning window manager" (spawn (myEditor ++ " -e vim /home/endesse/.config/bspwm/bspwmrc"))) []
+       , Node (TS.TSNode "dmenu config.h" "dynamic menu program" (spawn (myEditor ++ " -e vim /home/endesse/dmenu-distrotube/config.h"))) []
+       , Node (TS.TSNode "qutebrowser config.py" "qutebrowser web browser" (spawn (myEditor ++ " -e /home/endesse/.config/qutebrowser/config.py"))) []
+       , Node (TS.TSNode "xresources" "xresources file" (spawn (myEditor ++ " -e vim /home/endesse/.Xresources"))) []
        ]
    , Node (TS.TSNode "+ Screenshots" "take a screenshot" (return ()))
        [ Node (TS.TSNode "Quick fullscreen" "take screenshot immediately" (spawn "scrot -d 1 ~/scrot/%Y-%m-%d-@%H-%M-%S-scrot.png")) []
@@ -370,7 +371,7 @@ myTreeNavigation = M.fromList
     , ((0, xK_a),        TS.moveTo ["+ Accessories"])
     , ((0, xK_e),        TS.moveTo ["+ Games"])
     , ((0, xK_g),        TS.moveTo ["+ Graphics"])
-    , ((0, xK_h),	 TS.moveTo ["+ Pentest"])
+    , ((0, xK_h),	 TS.moveTo ["+ Pentest", "+ Cracking", "+ Enumeration", "+ Exploit"])
     , ((0, xK_i),        TS.moveTo ["+ Internet"])
     , ((0, xK_m),        TS.moveTo ["+ Multimedia"])
     , ((0, xK_o),        TS.moveTo ["+ Office"])
