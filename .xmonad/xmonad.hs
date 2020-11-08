@@ -165,51 +165,52 @@ treeselectAction a = TS.treeselectAction a
    [ Node (TS.TSNode "+ Accessories" "Accessory applications" (return ()))
        [ Node (TS.TSNode "Archive Manager" "Tool for archived packages" (spawn "file-roller")) []
        , Node (TS.TSNode "Calculator" "Gui version of qalc" (spawn "qalculate-gtk")) []
-       , Node (TS.TSNode "Calibre" "Manages books on my ereader" (spawn "calibre")) []
-       , Node (TS.TSNode "Castero" "Terminal podcast client" (spawn (myTerminal ++ " -e castero"))) []
        , Node (TS.TSNode "Picom Toggle on/off" "Compositor for window managers" (spawn "killall picom; picom")) []
-       , Node (TS.TSNode "Virt-Manager" "Virtual machine manager" (spawn "virt-manager")) []
        , Node (TS.TSNode "Virtualbox" "Oracle's virtualization program" (spawn "virtualbox")) []
        ]
+   , Node (TS.TSNode "+ Pentest" "Pentesting tools" (return()))
+       [ Node (TS.TSNode "+ Cracking" (return()))
+       		[ Node (TS.TSNode "Hydra" "Fast logon cracker" (spawn (myTerminal ++ " -e hydra"))) []
+       		, Node (TS.TSNode "John" "Hash cracking" (spawn (myTerminal ++ " -e john"))) []
+		]
+       , Node (TS.TSNode "+ Enumeration" (return()))
+--       		[ Node (TS.TSNode "Dirbuster" "Brute Force Directory's" (spawn "dirbuster"))[]
+       		, Node (TS.TSNode "Gobuster" "Directory/file busting" (spawn (myTerminal ++ " -e gobuster"))) []
+       		, Node (TS.TSNode "Nmap" "Enumeration" (spawn (myTerminal ++ " -e nmap -h")))[]
+		]
+       , Node (TS.TSNode "+ Exploit" (return()))
+       		[ Node (TS.TSNode "Exploit DB" "Exploit Database" (spawn (myTerminal ++ " -e searchsploit -h"))) []
+       		, Node (TS.TSNode "Metasploit" "Exploit framework" (spawn (myTerminal ++ " -e msfconsole"))) []
+		]
+       , Node (TS.TSNode "Burp Suite" "Packet Injection" (spawn "burpsuite")) []
+       , Node (TS.TSNode "Wireshark" "Packet Sniffer" (spawn "wireshark")) []
+       ]
    , Node (TS.TSNode "+ Games" "fun and games" (return ()))
-       [ Node (TS.TSNode "0 A.D" "Real-time strategy empire game" (spawn "0ad")) []
-       , Node (TS.TSNode "Battle For Wesnoth" "Turn-based stretegy game" (spawn "wesnoth")) []
-       , Node (TS.TSNode "Steam" "The Steam gaming platform" (spawn "steam")) []
-       , Node (TS.TSNode "SuperTuxKart" "Open source kart racing" (spawn "supertuxkart")) []
-       , Node (TS.TSNode "Xonotic" "Fast-paced first person shooter" (spawn "xonotic")) []
+       [ Node (TS.TSNode "Steam" "Steam gamming platform"(spawn "steam")) []
        ]
    , Node (TS.TSNode "+ Graphics" "graphics programs" (return ()))
        [ Node (TS.TSNode "Gimp" "GNU image manipulation program" (spawn "gimp")) []
        , Node (TS.TSNode "Inkscape" "An SVG editing program" (spawn "inkscape")) []
+       , Node (TS.TSNode "Krita" "Digital painting program" (spawn "krita")) []
        , Node (TS.TSNode "LibreOffice Draw" "LibreOffice drawing program" (spawn "lodraw")) []
-       , Node (TS.TSNode "Shotwell" "Photo management program" (spawn "shotwell")) []
        , Node (TS.TSNode "Simple Scan" "A simple scanning program" (spawn "simple-scan")) []
        ]
    , Node (TS.TSNode "+ Internet" "internet and web programs" (return ()))
-       [ Node (TS.TSNode "Brave" "A privacy-oriented web browser" (spawn "brave")) []
-       , Node (TS.TSNode "Discord" "Chat and video chat platform" (spawn "discord")) []
-       , Node (TS.TSNode "Elfeed" "An Emacs RSS feed reader" (spawn "xxx")) []
+       [ Node (TS.TSNode "Discord" "Chat and video chat platform" (spawn "discord")) []
        , Node (TS.TSNode "FileZilla" "An FTP client" (spawn "filezilla")) []
        , Node (TS.TSNode "Firefox" "Open source web browser" (spawn "firefox")) []
-       , Node (TS.TSNode "Geary" "Email client with a nice UI" (spawn "geary")) []
-       , Node (TS.TSNode "Jitsi" "Open source video chat" (spawn "xxx")) []
-       , Node (TS.TSNode "Mu4e" "An Emacs email client" (spawn "xxx")) []
-       , Node (TS.TSNode "Nextcloud" "File syncing desktop utility" (spawn "nextcloud")) []
+--       , Node (TS.TSNode "Jitsi" "Open source video chat" (spawn "xxx")) []
        , Node (TS.TSNode "Qutebrowser" "Minimal web browser" (spawn "qutebrowser")) []
-       , Node (TS.TSNode "Surf Browser" "Suckless surf web browser" (spawn "surf")) []
-       , Node (TS.TSNode "Thunderbird" "Open source email client" (spawn "thunderbird")) []
        , Node (TS.TSNode "Transmission" "Bittorrent client" (spawn "transmission-gtk")) []
-       , Node (TS.TSNode "Zoom" "Web conferencing" (spawn "zoom")) []
        ]
    , Node (TS.TSNode "+ Multimedia" "sound and video applications" (return ()))
        [ Node (TS.TSNode "Alsa Mixer" "Alsa volume control utility" (spawn (myTerminal ++ " -e alsamixer"))) []
        , Node (TS.TSNode "Audacity" "Graphical audio editing program" (spawn "audacity")) []
-       , Node (TS.TSNode "Deadbeef" "Lightweight music player" (spawn "deadbeef")) []
-       , Node (TS.TSNode "EMMS" "Emacs multimedia player" (spawn "xxx")) []
        , Node (TS.TSNode "Kdenlive" "Open source non-linear video editor" (spawn "kdenlive")) []
        , Node (TS.TSNode "OBS Studio" "Open Broadcaster Software" (spawn "obs")) []
-       , Node (TS.TSNode "Pianobar" "A terminal Pandora client" (spawn (myTerminal ++ " -e pianobar"))) []
        , Node (TS.TSNode "VLC" "Multimedia player and server" (spawn "vlc")) []
+       , Node (TS.TSNode "MPV" "Video Player" (spawn "mpv")) []
+       , Node (TS.TSNode "Sonic Visualiser" "Waveform visualiser" (spawn "sonic-visualiser")) []
        ]
    , Node (TS.TSNode "+ Office" "office applications" (return ()))
        [ Node (TS.TSNode "LibreOffice" "Open source office suite" (spawn "libreoffice")) []
@@ -222,34 +223,17 @@ treeselectAction a = TS.treeselectAction a
        , Node (TS.TSNode "Zathura" "PDF Viewer" (spawn "zathura")) []
        ]
    , Node (TS.TSNode "+ Programming" "programming and scripting tools" (return ()))
-       [ Node (TS.TSNode "+ Emacs" "Emacs is more than a text editor" (return ()))
-           [ Node (TS.TSNode "Emacs Client" "Doom Emacs launched as client" (spawn "emacsclient -c -a emacs")) []
-           , Node (TS.TSNode "M-x dired" "File manager for Emacs" (spawn "emacsclient -c -a '' --eval '(dired nil)'")) []
-           , Node (TS.TSNode "M-x elfeed" "RSS client for Emacs" (spawn "emacsclient -c -a '' --eval '(elfeed)'")) []
-           , Node (TS.TSNode "M-x emms" "Emacs" (spawn "emacsclient -c -a '' --eval '(emms)' --eval '(emms-play-directory-tree \"~/Music/Non-Classical/70s-80s/\")'")) []
-           , Node (TS.TSNode "M-x erc" "IRC client for Emacs" (spawn "emacsclient -c -a '' --eval '(erc)'")) []
-           , Node (TS.TSNode "M-x eshell" "The Eshell in Emacs" (spawn "emacsclient -c -a '' --eval '(eshell)'")) []
-           , Node (TS.TSNode "M-x ibuffer" "Emacs buffer list" (spawn "emacsclient -c -a '' --eval '(ibuffer)'")) []
-           , Node (TS.TSNode "M-x mastodon" "Emacs" (spawn "emacsclient -c -a '' --eval '(mastodon)'")) []
-           , Node (TS.TSNode "M-x mu4e" "Email client for Emacs" (spawn "emacsclient -c -a '' --eval '(mu4e)'")) []
-           , Node (TS.TSNode "M-x vterm" "Emacs" (spawn "emacsclient -c -a '' --eval '(+vterm/here nil))'")) []
-           ]
-        , Node (TS.TSNode "Python" "Python interactive prompt" (spawn (myTerminal ++ " -e python"))) []
+        [ Node (TS.TSNode "Python" "Python interactive prompt" (spawn (myTerminal ++ " -e python"))) []
+	, Node (TS.TSNode "Visual Studio Code" "Coding IDE from Microsoft" (spawn "code")) []
        ]
    , Node (TS.TSNode "+ System" "system tools and utilities" (return ()))
-       [ Node (TS.TSNode "Alacritty" "GPU accelerated terminal" (spawn "alacritty")) []
-       , Node (TS.TSNode "Dired" "Emacs file manager" (spawn "xxx")) []
-       , Node (TS.TSNode "Etcher" "USB stick writer" (spawn "xxx")) []
-       , Node (TS.TSNode "Glances" "Terminal system monitor" (spawn (myTerminal ++ " -e glances"))) []
+       [ Node (TS.TSNode "Glances" "Terminal system monitor" (spawn (myTerminal ++ " -e glances"))) []
        , Node (TS.TSNode "Gufw" "GUI uncomplicated firewall" (spawn "gufw")) []
        , Node (TS.TSNode "Htop" "Terminal process viewer" (spawn (myTerminal ++ " -e htop"))) []
        , Node (TS.TSNode "LXAppearance" "Customize look and feel" (spawn "lxappearance")) []
        , Node (TS.TSNode "Nitrogen" "Wallpaper viewer and setter" (spawn "nitrogen")) []
        , Node (TS.TSNode "Nmon" "Network monitor" (spawn (myTerminal ++ " -e nmon"))) []
-       , Node (TS.TSNode "PCManFM" "Lightweight graphical file manager" (spawn "pcmanfm")) []
-       , Node (TS.TSNode "Simple Terminal" "Suckless simple terminal" (spawn "st")) []
-       , Node (TS.TSNode "Stress Terminal UI" "Stress your system" (spawn (myTerminal ++ " -e vifm"))) []
-       , Node (TS.TSNode "Vifm" "Vim-like file manager" (spawn (myTerminal ++ " -e vifm"))) []
+       , Node (TS.TSNode "Vifm" "Vim-like file manager" (spawn (myTerminal ++ " -e vifmrun"))) []
        ]
    , Node (TS.TSNode "------------------------" "" (spawn "xdotool key Escape")) []
    , Node (TS.TSNode "+ Bookmarks" "a list of web bookmarks" (return ()))
@@ -265,22 +249,6 @@ treeselectAction a = TS.treeselectAction a
                , Node (TS.TSNode "LXer" "LXer linux news aggregation" (spawn (myBrowser ++ "http://lxer.com"))) []
                , Node (TS.TSNode "OMG Ubuntu" "Ubuntu news, apps and reviews" (spawn (myBrowser ++ "https://www.omgubuntu.co.uk"))) []
                ]
-           , Node (TS.TSNode "+ Window Managers" "window manager documentation" (return ()))
-               [ Node (TS.TSNode "+ Awesome" "awesomewm documentation" (return ()))
-                   [ Node (TS.TSNode "Awesome" "Homepage for awesome wm" (spawn (myBrowser ++ "https://awesomewm.org/"))) []
-                   , Node (TS.TSNode "Awesome GitHub" "The GutHub page for awesome" (spawn (myBrowser ++ "https://github.com/awesomeWM/awesome"))) []
-                   , Node (TS.TSNode "r/awesome" "Subreddit for awesome" (spawn (myBrowser ++ "https://www.reddit.com/r/awesomewm/"))) []
-                   ]
-               , Node (TS.TSNode "+ Dwm" "dwm documentation" (return ()))
-                   [ Node (TS.TSNode "Dwm" "Dynamic window manager" (spawn (myBrowser ++ "https://dwm.suckless.org/"))) []
-                   , Node (TS.TSNode "Dwmblocks" "Modular status bar for dwm" (spawn (myBrowser ++ "https://github.com/torrinfail/dwmblocks"))) []
-                   , Node (TS.TSNode "r/suckless" "Subreddit for suckless software" (spawn (myBrowser ++ "https://www.reddit.com/r/suckless//"))) []
-                   ]
-               , Node (TS.TSNode "+ Qtile" "qtile documentation" (return ()))
-                   [ Node (TS.TSNode "Qtile" "Tiling window manager in Python" (spawn (myBrowser ++ "http://www.qtile.org"))) []
-                   , Node (TS.TSNode "Qtile GitHub" "The GitHub page for qtile" (spawn (myBrowser ++ "https://github.com/qtile/qtile"))) []
-                   , Node (TS.TSNode "r/qtile" "Subreddit for qtile" (spawn (myBrowser ++ "https://www.reddit.com/r/qtile/"))) []
-                   ]
                , Node (TS.TSNode "+ XMonad" "xmonad documentation" (return ()))
                    [ Node (TS.TSNode "XMonad" "Homepage for XMonad" (spawn (myBrowser ++ "http://xmonad.org"))) []
                    , Node (TS.TSNode "XMonad GitHub" "The GitHub page for XMonad" (spawn (myBrowser ++ "https://github.com/xmonad/xmonad"))) []
@@ -289,13 +257,6 @@ treeselectAction a = TS.treeselectAction a
                    , Node (TS.TSNode "Xmobar" "Minimal text-based status bar"  (spawn (myBrowser ++ "https://hackage.haskell.org/package/xmobar"))) []
                    ]
                ]
-           ]
-       , Node (TS.TSNode "+ Emacs" "Emacs documentation" (return ()))
-           [ Node (TS.TSNode "GNU Emacs" "Extensible free/libre text editor" (spawn (myBrowser ++ "https://www.gnu.org/software/emacs/"))) []
-           , Node (TS.TSNode "Doom Emacs" "Emacs distribution with sane defaults" (spawn (myBrowser ++ "https://github.com/hlissner/doom-emacs"))) []
-           , Node (TS.TSNode "r/emacs" "M-x emacs-reddit" (spawn (myBrowser ++ "https://www.reddit.com/r/emacs/"))) []
-           , Node (TS.TSNode "EmacsWiki" "EmacsWiki Site Map" (spawn (myBrowser ++ "https://www.emacswiki.org/emacs/SiteMap"))) []
-           , Node (TS.TSNode "Emacs StackExchange" "Q&A site for emacs" (spawn (myBrowser ++ "https://emacs.stackexchange.com/"))) []
            ]
        , Node (TS.TSNode "+ Search and Reference" "Search engines, indices and wikis" (return ()))
            [ Node (TS.TSNode "DuckDuckGo" "Privacy-oriented search engine" (spawn (myBrowser ++ "https://duckduckgo.com/"))) []
@@ -310,11 +271,6 @@ treeselectAction a = TS.treeselectAction a
                , Node (TS.TSNode "r/commandline" "Subreddit for the command line" (spawn (myBrowser ++ "https://www.reddit.com/r/commandline/"))) []
                , Node (TS.TSNode "Learn Shell" "Interactive shell tutorial" (spawn (myBrowser ++ "https://www.learnshell.org/"))) []
                ]
-         , Node (TS.TSNode "+ Elisp" "emacs lisp documentation" (return ()))
-             [ Node (TS.TSNode "Emacs Lisp" "Reference manual for elisp" (spawn (myBrowser ++ "https://www.gnu.org/software/emacs/manual/html_node/elisp/"))) []
-             , Node (TS.TSNode "Learn Elisp in Y Minutes" "Single webpage for elisp basics" (spawn (myBrowser ++ "https://learnxinyminutes.com/docs/elisp/"))) []
-             , Node (TS.TSNode "r/Lisp" "Subreddit for lisp languages" (spawn (myBrowser ++ "https://www.reddit.com/r/lisp/"))) []
-             ]
          , Node (TS.TSNode "+ Haskell" "haskell documentation" (return ()))
              [ Node (TS.TSNode "Haskell.org" "Homepage for haskell" (spawn (myBrowser ++ "http://www.haskell.org"))) []
              , Node (TS.TSNode "Hoogle" "Haskell API search engine" (spawn "https://hoogle.haskell.org/")) []
@@ -332,45 +288,18 @@ treeselectAction a = TS.treeselectAction a
            , Node (TS.TSNode "r/Vim" "Subreddit for vim" (spawn (myBrowser ++ "https://www.reddit.com/r/vim/"))) []
            , Node (TS.TSNode "Vi/m StackExchange" "Vi/m related questions" (spawn (myBrowser ++ "https://vi.stackexchange.com/"))) []
            ]
-       , Node (TS.TSNode "My Start Page" "Custom start page for browser" (spawn (myBrowser ++ "file:///home/endesse/.surf/html/homepage.html"))) []
-       ]
    , Node (TS.TSNode "+ Config Files" "config files that edit often" (return ()))
-       [ Node (TS.TSNode "+ emacs configs" "My xmonad config files" (return ()))
-         [ Node (TS.TSNode "doom emacs config.org" "doom emacs config" (spawn (myEditor ++ "/home/endesse/.doom.d/config.org"))) []
-         , Node (TS.TSNode "doom emacs init.el" "doom emacs init" (spawn (myEditor ++ "/home/endesse/.doom.d/init.el"))) []
-         , Node (TS.TSNode "doom emacs packages.el" "doom emacs packages" (spawn (myEditor ++ "/home/endesse/.doom.d/packages.el"))) []
-         ]
-       , Node (TS.TSNode "+ xmobar configs" "My xmobar config files" (return ()))
+       [ Node (TS.TSNode "+ xmobar configs" "My xmobar config files" (return ()))
            [ Node (TS.TSNode "xmobar mon1" "status bar on monitor 1" (spawn (myEditor ++ "/home/endesse/.config/xmobar/xmobarrc0"))) []
            ]
        , Node (TS.TSNode "+ xmonad configs" "My xmonad config files" (return ()))
            [ Node (TS.TSNode "xmonad.hs" "My XMonad Main" (spawn (myEditor ++ "/home/endesse/.xmonad/xmonad.hs"))) []
-           , Node (TS.TSNode "MyGridMenu.hs" "My XMonad GridSelect menu" (spawn (myEditor ++ "/home/endesse/.xmonad/lib/Custom/MyGridMenu.hs"))) []
-           , Node (TS.TSNode "MyKeys.hs" "My XMonad keybindings" (spawn (myEditor ++ "/home/endesse/.xmonad/lib/Custom/MyKeys.hs"))) []
-           , Node (TS.TSNode "MyLayouts.hs" "My XMonad layouts" (spawn (myEditor ++ "/home/endesse/.xmonad/lib/Custom/MyLayouts.hs"))) []
-           , Node (TS.TSNode "MyPrompts.hs" "My XMonad prompts" (spawn (myEditor ++ "/home/endesse/.xmonad/lib/Custom/MyPrompts.hs"))) []
-           , Node (TS.TSNode "MyScratchpads.hs" "My XMonad named scratchpads" (spawn (myEditor ++ "/home/endesse/.xmonad/lib/Custom/MyScratchpads.hs"))) []
-           , Node (TS.TSNode "MyTreeMenu.hs" "My XMonad TreeSelect menu" (spawn (myEditor ++ "/home/endesse/.xmonad/lib/Custom/MyTreeMenu.hs"))) []
-           , Node (TS.TSNode "MyVariables.hs" "My XMonad variables" (spawn (myEditor ++ "/home/endesse/.xmonad/lib/Custom/MyVariables.hs"))) []
            ]
-       , Node (TS.TSNode "alacritty" "alacritty terminal emulator" (spawn (myEditor ++ "/home/endesse/.config/alacritty/alacritty.yml"))) []
-       , Node (TS.TSNode "awesome" "awesome window manager" (spawn (myEditor ++ "/home/endesse/.config/awesome/rc.lua"))) []
        , Node (TS.TSNode "bashrc" "the bourne again shell" (spawn (myEditor ++ "/home/endesse/.bashrc"))) []
        , Node (TS.TSNode "bspwmrc" "binary space partitioning window manager" (spawn (myEditor ++ "/home/endesse/.config/bspwm/bspwmrc"))) []
        , Node (TS.TSNode "dmenu config.h" "dynamic menu program" (spawn (myEditor ++ "/home/endesse/dmenu-distrotube/config.h"))) []
-       , Node (TS.TSNode "dunst" "dunst notifications" (spawn (myEditor ++ "/home/endesse/.config/dunst/dunstrc"))) []
-       , Node (TS.TSNode "dwm config.h" "dynamic window manager" (spawn (myEditor ++ "/home/endesse/dwm-distrotube/config.h"))) []
-       , Node (TS.TSNode "herbstluftwm" "herbstluft window manager" (spawn (myEditor ++ "/home/endesse/.config/herbstluftwm/autostart"))) []
-       , Node (TS.TSNode "neovim init.vim" "neovim text editor" (spawn (myEditor ++ "/home/endesse/.config/nvim/init.vim"))) []
-       , Node (TS.TSNode "polybar" "easy-to-use status bar" (spawn (myEditor ++ "/home/endesse/.config/polybar/config"))) []
-       , Node (TS.TSNode "qtile config.py" "qtile window manager" (spawn (myEditor ++ "/home/endesse/.config/qtile/config.py"))) []
        , Node (TS.TSNode "qutebrowser config.py" "qutebrowser web browser" (spawn (myEditor ++ "/home/endesse/.config/qutebrowser/config.py"))) []
-       , Node (TS.TSNode "st config.h" "suckless simple terminal" (spawn (myEditor ++ "home/endesse/st-distrotube/config.h"))) []
-       , Node (TS.TSNode "sxhkdrc" "simple X hotkey daemon" (spawn (myEditor ++ "/home/endesse/.config/sxhkd/sxhkdrc"))) []
-       , Node (TS.TSNode "surf config.h" "surf web browser" (spawn (myEditor ++ "/home/endesse/surf-distrotube/config.h"))) []
-       , Node (TS.TSNode "tabbed config.h" "generic tabbed interface" (spawn (myEditor ++ "home/endesse/tabbed-distrotube/config.h"))) []
        , Node (TS.TSNode "xresources" "xresources file" (spawn (myEditor ++ "/home/endesse/.Xresources"))) []
-       , Node (TS.TSNode "zshrc" "Config for the z shell" (spawn (myEditor ++ "/home/endesse/.zshrc"))) []
        ]
    , Node (TS.TSNode "+ Screenshots" "take a screenshot" (return ()))
        [ Node (TS.TSNode "Quick fullscreen" "take screenshot immediately" (spawn "scrot -d 1 ~/scrot/%Y-%m-%d-@%H-%M-%S-scrot.png")) []
@@ -441,6 +370,7 @@ myTreeNavigation = M.fromList
     , ((0, xK_a),        TS.moveTo ["+ Accessories"])
     , ((0, xK_e),        TS.moveTo ["+ Games"])
     , ((0, xK_g),        TS.moveTo ["+ Graphics"])
+    , ((0, xK_h),	 TS.moveTo ["+ Pentest"])
     , ((0, xK_i),        TS.moveTo ["+ Internet"])
     , ((0, xK_m),        TS.moveTo ["+ Multimedia"])
     , ((0, xK_o),        TS.moveTo ["+ Office"])
