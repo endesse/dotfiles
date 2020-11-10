@@ -159,6 +159,8 @@ myAppGrid = [ ("Qutebrowser", "qutebrowser")
 		 , ("Discord", "discord")
 		 , ("Steam", "steam")
 		 , ("Visual Studio Code", "code")
+		 , ("Blender", "blender")
+		 , ("Natron", "Natron")
                  ]
 
 treeselectAction :: TS.TSConfig (X ()) -> X ()
@@ -212,6 +214,8 @@ treeselectAction a = TS.treeselectAction a
        , Node (TS.TSNode "VLC" "Multimedia player and server" (spawn "vlc")) []
        , Node (TS.TSNode "MPV" "Video Player" (spawn "mpv")) []
        , Node (TS.TSNode "Sonic Visualiser" "Waveform visualiser" (spawn "sonic-visualiser")) []
+       , Node (TS.TSNode "Natron" "Compositing for VFX and Mograph" (spawn "Natron")) []
+       , Node (TS.TSNode "Blender" "Open 3D Creation Suite" (spawn "blender")) []
        ]
    , Node (TS.TSNode "+ Office" "office applications" (return ()))
        [ Node (TS.TSNode "LibreOffice" "Open source office suite" (spawn "libreoffice")) []
@@ -422,7 +426,7 @@ dtXPConfig' = dtXPConfig
       }
 
 -- A list of all of the standard Xmonad prompts and a key press assigned to them.
--- These are used in conjunction with keybinding I set later in the config.
+-- These are used in conjunction with keybinding I set later in the config. SUPER+p <key>
 promptList :: [(String, XPConfig -> X ())]
 promptList = [ ("m", manPrompt)          -- manpages prompt
              , ("p", passPrompt)         -- get passwords (requires 'pass')
@@ -432,7 +436,7 @@ promptList = [ ("m", manPrompt)          -- manpages prompt
              , ("x", xmonadPrompt)       -- xmonad prompt
              ]
 
--- Same as the above list except this is for my custom prompts.
+-- Same as the above list except this is for my custom prompts. SUPER+p c
 promptList' :: [(String, XPConfig -> String -> X (), String)]
 promptList' = [ ("c", calcPrompt, "qalc")         -- requires qalculate-gtk
               ]
@@ -492,7 +496,7 @@ reddit   = S.searchEngine "reddit" "https://www.reddit.com/search/?q="
 urban    = S.searchEngine "urban" "https://www.urbandictionary.com/define.php?term="
 
 -- This is the list of search engines that I want to use. Some are from
--- XMonad.Actions.Search, and some are the ones that I added above.
+-- XMonad.Actions.Search, and some are the ones that I added above. SUPER+s <key>
 searchList :: [(String, S.SearchEngine)]
 searchList = [ ("a", archwiki)
              , ("d", S.duckduckgo)
@@ -547,6 +551,11 @@ tall     = renamed [Replace "tall"]
            $ limitWindows 12
            $ mySpacing 8
            $ ResizableTall 1 (3/100) (1/2) []
+mirror	 = renamed [Replace "mirror_tall"]
+	   $ limitWindows 12
+	   $ mySpacing 8
+	   $ Mirror
+	   $ ResizableTall 1 (3/100) (1/2) []
 magnify  = renamed [Replace "magnify"]
            $ magnifier
            $ limitWindows 12
@@ -604,6 +613,7 @@ myLayoutHook = avoidStruts $ mouseResize $ windowArrange $ T.toggleLayouts float
              where
                -- I've commented out the layouts I don't use.
                myDefaultLayout =     tall
+	       			 ||| mirror
                                  ||| magnify
                                  ||| noBorders monocle
                                  ||| floats
@@ -634,11 +644,15 @@ myManageHook = composeAll
      -- I'm doing it this way because otherwise I would have to write out
      -- the full name of my workspaces.
      [ className =? "htop"    --> doShift ( myWorkspaces !! 7 )
-     , title =? "firefox"     --> doShift ( myWorkspaces !! 1 )
+     , className =? "firefox" --> doShift ( myWorkspaces !! 1 )
      , className =? "mpv"     --> doShift ( myWorkspaces !! 7 )
      -- , className =? "vlc"     --> doShift ( myWorkspaces !! 7 )
      , className =? "Gimp"    --> doShift ( myWorkspaces !! 8 )
      , className =? "Gimp"    --> doFloat
+     , className =? "Inkscape"    --> doShift ( myWorkspaces !! 8 )
+     , className =? "Inkscape"    --> doFloat
+     , title =? "Krita"    --> doShift ( myWorkspaces !! 8 )
+     , title =? "Krita"    --> doFloat
      , title =? "Oracle VM VirtualBox Manager"     --> doFloat
      , className =? "VirtualBox Manager" --> doShift  ( myWorkspaces !! 4 )
      , (className =? "firefox" <&&> resource =? "Dialog") --> doFloat  -- Float Firefox Dialog
@@ -725,19 +739,6 @@ myKeys =
         , ("M-u l", spawn "mocp --next")
         , ("M-u h", spawn "mocp --previous")
         , ("M-u <Space>", spawn "mocp --toggle-pause")
-
-    -- Emacs (CTRL-e followed by a key)
-        , ("C-e e", spawn "emacsclient -c -a 'emacs'")                            -- start emacs
-        , ("C-e b", spawn "emacsclient -c -a 'emacs' --eval '(ibuffer)'")         -- list emacs buffers
-        , ("C-e d", spawn "emacsclient -c -a 'emacs' --eval '(dired nil)'")       -- dired emacs file manager
-        , ("C-e i", spawn "emacsclient -c -a 'emacs' --eval '(erc)'")             -- erc emacs irc client
-        , ("C-e m", spawn "emacsclient -c -a 'emacs' --eval '(mu4e)'")            -- mu4e emacs email client
-        , ("C-e n", spawn "emacsclient -c -a 'emacs' --eval '(elfeed)'")          -- elfeed emacs rss client
-        , ("C-e s", spawn "emacsclient -c -a 'emacs' --eval '(eshell)'")          -- eshell within emacs
-        , ("C-e t", spawn "emacsclient -c -a 'emacs' --eval '(mastodon)'")        -- mastodon within emacs
-        , ("C-e v", spawn "emacsclient -c -a 'emacs' --eval '(+vterm/here nil)'") -- vterm within emacs
-        -- emms is an emacs audio player. I set it to auto start playing in a specific directory.
-        , ("C-e a", spawn "emacsclient -c -a 'emacs' --eval '(emms)' --eval '(emms-play-directory-tree \"~/Music/Non-Classical/70s-80s/\")'")
 
     --- My Applications (Super+Alt+Key)
         , ("M-M1-a", spawn (myTerminal ++ " -e ncpamixer"))
