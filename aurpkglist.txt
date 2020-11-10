@@ -1,0 +1,14 @@
+burpsuite
+dirbuster
+dirstalk
+fontpreview
+gobuster-git
+john-git
+lightdm-webkit-theme-aether
+natron-bin
+natron-plugins
+nerd-fonts-complete
+openfx-arena
+steam-fonts
+urxvt-resize-font-git
+yay-git
