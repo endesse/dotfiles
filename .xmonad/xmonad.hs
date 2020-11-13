@@ -161,6 +161,7 @@ myAppGrid = [ ("Qutebrowser", "qutebrowser")
 		 , ("Visual Studio Code", "code")
 		 , ("Blender", "blender")
 		 , ("Natron", "Natron")
+		 , ("Lutris", "lutris")
                  ]
 
 treeselectAction :: TS.TSConfig (X ()) -> X ()
@@ -173,23 +174,24 @@ treeselectAction a = TS.treeselectAction a
        ]
    , Node (TS.TSNode "+ Pentest" "Pentesting tools" (return()))
        [ Node (TS.TSNode "+ Cracking" "Set of Cracking tools" (return()))
-       		[ Node (TS.TSNode "Hydra" "Fast logon cracker" (spawn (myTerminal ++ " -e hydra"))) []
-       		, Node (TS.TSNode "John" "Hash cracking" (spawn (myTerminal ++ " -e john"))) []
+       		[ Node (TS.TSNode "Hydra" "Fast logon cracker" (spawn (myTerminal ++ " -e sh -c 'hydra; bash'"))) []
+       		, Node (TS.TSNode "John" "Hash cracking" (spawn (myTerminal ++ "  -e sh -c 'john; bash'"))) []
 		]
        , Node (TS.TSNode "+ Enumeration" "Tools for system and vulnerabilities enumerations" (return()))
 --       		[ Node (TS.TSNode "Dirbuster" "Brute Force Directory's" (spawn "dirbuster"))[]
-       		[ Node (TS.TSNode "Gobuster" "Directory/file busting" (spawn (myTerminal ++ " -e gobuster"))) []
-       		, Node (TS.TSNode "Nmap" "Enumeration" (spawn (myTerminal ++ " -e nmap -h"))) []
+       		[ Node (TS.TSNode "Gobuster" "Directory/file busting" (spawn (myTerminal ++ " -e sh -c 'gobuster; bash'"))) []
+       		, Node (TS.TSNode "Nmap" "Enumeration" (spawn (myTerminal ++ " -e sh -c 'nmap; bash'"))) []
 		]
        , Node (TS.TSNode "+ Exploit" "Tools for post exploitation" (return()))
-       		[ Node (TS.TSNode "Exploit DB" "Exploit Database" (spawn (myTerminal ++ " -e searchsploit -h"))) []
+       		[ Node (TS.TSNode "Exploit DB" "Exploit Database" (spawn (myTerminal ++ " -e sh -c 'searchsploit; bash'"))) []
        		, Node (TS.TSNode "Metasploit" "Exploit framework" (spawn (myTerminal ++ " -e msfconsole"))) []
 		]
        , Node (TS.TSNode "Burp Suite" "Packet Injection" (spawn "burpsuite")) []
        , Node (TS.TSNode "Wireshark" "Packet Sniffer" (spawn "wireshark")) []
        ]
    , Node (TS.TSNode "+ Games" "fun and games" (return ()))
-       [ Node (TS.TSNode "Steam" "Steam gamming platform"(spawn "steam")) []
+       [ Node (TS.TSNode "Steam" "Steam gaming platform" (spawn "steam")) []
+       , Node (TS.TSNode "Lutris" "Open gaming platform" (spawn "lutris")) []
        ]
    , Node (TS.TSNode "+ Graphics" "graphics programs" (return ()))
        [ Node (TS.TSNode "Gimp" "GNU image manipulation program" (spawn "gimp")) []
@@ -645,6 +647,7 @@ myManageHook = composeAll
      -- the full name of my workspaces.
      [ className =? "htop"    --> doShift ( myWorkspaces !! 7 )
      , className =? "firefox" --> doShift ( myWorkspaces !! 1 )
+     , className =? "qutebrowser" --> doShift ( myWorkspaces !! 1 )
      , className =? "mpv"     --> doShift ( myWorkspaces !! 7 )
      -- , className =? "vlc"     --> doShift ( myWorkspaces !! 7 )
      , className =? "Gimp"    --> doShift ( myWorkspaces !! 8 )
@@ -763,8 +766,8 @@ myKeys =
         -- , ("<XF86AudioMute>",   spawn "amixer set Master toggle")  -- Bug prevents it from toggling correctly in 12.04.
         , ("<XF86AudioLowerVolume>", spawn "amixer set Master 5%- unmute")
         , ("<XF86AudioRaiseVolume>", spawn "amixer set Master 5%+ unmute")
-        , ("<XF86HomePage>", spawn "firefox")
-        , ("<XF86Search>", safeSpawn "firefox" ["https://www.google.com/"])
+        , ("<XF86HomePage>", spawn "qutebrowser")
+        , ("<XF86Search>", safeSpawn "qutebrowser" ["https://www.google.com/"])
         , ("<XF86Mail>", runOrRaise "geary" (resource =? "thunderbird"))
         , ("<XF86Calculator>", runOrRaise "gcalctool" (resource =? "gcalctool"))
         , ("<XF86Eject>", spawn "toggleeject")
