@@ -186,6 +186,10 @@ treeselectAction a = TS.treeselectAction a
        		[ Node (TS.TSNode "Exploit DB" "Exploit Database" (spawn (myTerminal ++ " -e sh -c 'searchsploit; bash'"))) []
        		, Node (TS.TSNode "Metasploit" "Exploit framework" (spawn (myTerminal ++ " -e msfconsole"))) []
 		]
+       , Node (TS.TSNode "+ Wordlists" "Various wordlists for pentesting" (return()))
+       		[ Node (TS.TSNode "Rockyou" "The famous Rockyou wordlist for users/passwords" (spawn (myTerminal ++ " -e vifmrun /usr/share/dict/"))) []
+		, Node (TS.TSNode "Seclists" "A compilation of various seclists" (spawn (myTerminal ++ " -e vifmrun /usr/share/wordlists/"))) []
+		]
        , Node (TS.TSNode "Burp Suite" "Packet Injection" (spawn "burpsuite")) []
        , Node (TS.TSNode "Wireshark" "Packet Sniffer" (spawn "wireshark")) []
        ]
@@ -747,13 +751,14 @@ myKeys =
         , ("M-M1-a", spawn (myTerminal ++ " -e ncpamixer"))
         , ("M-M1-b", spawn "surf www.youtube.com/c/DistroTube/")
         , ("M-M1-e", spawn (myTerminal ++ " -e neomutt"))
-        , ("M-M1-f", spawn (myTerminal ++ " -e sh ./.config/vifm/scripts/vifmrun | bash"))
+        , ("M-M1-f", spawn (myTerminal ++ " -e sh -c 'vifmrun; bash'"))
         , ("M-M1-i", spawn (myTerminal ++ " -e irssi"))
         , ("M-M1-j", spawn (myTerminal ++ " -e joplin"))
         , ("M-M1-l", spawn (myTerminal ++ " -e lynx https://distrotube.com"))
         , ("M-M1-m", spawn (myTerminal ++ " -e mocp"))
         , ("M-M1-n", spawn (myTerminal ++ " -e newsboat"))
         , ("M-M1-p", spawn (myTerminal ++ " -e pianobar"))
+	, ("M-M1-q", spawn ("qutebrowser"))
         , ("M-M1-r", spawn (myTerminal ++ " -e rtv"))
         , ("M-M1-t", spawn (myTerminal ++ " -e toot curses"))
         , ("M-M1-w", spawn (myTerminal ++ " -e wopr report.xml"))
