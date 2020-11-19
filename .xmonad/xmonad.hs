@@ -213,6 +213,7 @@ treeselectAction a = TS.treeselectAction a
 --       , Node (TS.TSNode "Jitsi" "Open source video chat" (spawn "xxx")) []
        , Node (TS.TSNode "Qutebrowser" "Minimal web browser" (spawn "qutebrowser")) []
        , Node (TS.TSNode "Transmission" "Bittorrent client" (spawn "transmission-gtk")) []
+       , Node (TS.TSNode "Youtube-DL" "Download youtube videos and more" (spawn (myTerminal ++ " -e sh -c 'youtube-dl --help; bash'"))) []
        ]
    , Node (TS.TSNode "+ Multimedia" "sound and video applications" (return ()))
        [ Node (TS.TSNode "Alsa Mixer" "Alsa volume control utility" (spawn (myTerminal ++ " -e alsamixer"))) []
