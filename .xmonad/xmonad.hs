@@ -5,7 +5,7 @@ import System.Exit (exitSuccess)
 import qualified XMonad.StackSet as W
 
     -- Actions
-import XMonad.Actions.CopyWindow (kill1, killAllOtherCopies)
+import XMonad.Actions.CopyWindow (copyToAll, kill1, killAllOtherCopies)
 import XMonad.Actions.CycleWS (moveTo, shiftTo, WSType(..), nextScreen, prevScreen)
 import XMonad.Actions.GridSelect
 import XMonad.Actions.MouseResize
@@ -153,8 +153,9 @@ myAppGrid = [ ("Qutebrowser", "qutebrowser")
 		 , ("Inkscape", "inkscape")
                  , ("Kdenlive", "kdenlive")
                  , ("LibreOffice Impress", "loimpress")
-		 , ("LibreOffice Math", "lomath")
+		 , ("LibreOffice Calc", "localc")
                  , ("LibreOffice Writer", "lowriter")
+		 , ("LibreOffice Draw", "lodraw")
                  , ("OBS", "obs")
 		 , ("Discord", "discord")
 		 , ("Steam", "steam")
@@ -181,6 +182,7 @@ treeselectAction a = TS.treeselectAction a
 --       		[ Node (TS.TSNode "Dirbuster" "Brute Force Directory's" (spawn "dirbuster"))[]
        		[ Node (TS.TSNode "Gobuster" "Directory/file busting" (spawn (myTerminal ++ " -e sh -c 'gobuster; bash'"))) []
        		, Node (TS.TSNode "Nmap" "Enumeration" (spawn (myTerminal ++ " -e sh -c 'nmap; bash'"))) []
+		, Node (TS.TSNode "MyCli" "MySQL Enumeration tool" (spawn (myTerminal ++ " -e sh -c 'mycli --help; bash'"))) []
 		]
        , Node (TS.TSNode "+ Exploit" "Tools for post exploitation" (return()))
        		[ Node (TS.TSNode "Exploit DB" "Exploit Database" (spawn (myTerminal ++ " -e sh -c 'searchsploit; bash'"))) []
@@ -711,7 +713,7 @@ myKeys =
         , ("M-<Backspace>", promote)         -- Moves focused window to master, others maintain order
         , ("M1-S-<Tab>", rotSlavesDown)      -- Rotate all windows except master and keep focus in place
         , ("M1-C-<Tab>", rotAllDown)         -- Rotate all the windows in the current stack
-        --, ("M-S-s", windows copyToAll)
+        , ("M-S-s", windows copyToAll)
         , ("M-C-s", killAllOtherCopies)
 
         -- Layouts
