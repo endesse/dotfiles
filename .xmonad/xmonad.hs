@@ -163,6 +163,12 @@ myAppGrid = [ ("Qutebrowser", "qutebrowser")
 		 , ("Blender", "blender")
 		 , ("Natron", "Natron")
 		 , ("Lutris", "lutris")
+		 , ("Akira", "akira")
+		 , ("Darktable", "darktable")
+		 , ("LMMS", "lmms")
+		 , ("Audacity", "audacity")
+		 , ("Sonic Visualiser", "sonic-visualiser")
+		 , ("Jitsi Meet Desktop", "jitsi-meet-desktop")
                  ]
 
 treeselectAction :: TS.TSConfig (X ()) -> X ()
@@ -179,8 +185,8 @@ treeselectAction a = TS.treeselectAction a
        		, Node (TS.TSNode "John" "Hash cracking" (spawn (myTerminal ++ "  -e sh -c 'john; bash'"))) []
 		]
        , Node (TS.TSNode "+ Enumeration" "Tools for system and vulnerabilities enumerations" (return()))
---       		[ Node (TS.TSNode "Dirbuster" "Brute Force Directory's" (spawn "dirbuster"))[]
-       		[ Node (TS.TSNode "Gobuster" "Directory/file busting" (spawn (myTerminal ++ " -e sh -c 'gobuster; bash'"))) []
+       		[ Node (TS.TSNode "Dirbuster" "Brute Force Directory's" (spawn "dirbuster")) []
+       		, Node (TS.TSNode "Gobuster" "Directory/file busting" (spawn (myTerminal ++ " -e sh -c 'gobuster; bash'"))) []
        		, Node (TS.TSNode "Nmap" "Enumeration" (spawn (myTerminal ++ " -e sh -c 'nmap; bash'"))) []
 		, Node (TS.TSNode "MyCli" "MySQL Enumeration tool" (spawn (myTerminal ++ " -e sh -c 'mycli --help; bash'"))) []
 		]
@@ -196,11 +202,13 @@ treeselectAction a = TS.treeselectAction a
        , Node (TS.TSNode "Wireshark" "Packet Sniffer" (spawn "wireshark")) []
        ]
    , Node (TS.TSNode "+ Games" "fun and games" (return ()))
-       [ Node (TS.TSNode "Steam" "Steam gaming platform" (spawn "steam")) []
-       , Node (TS.TSNode "Lutris" "Open gaming platform" (spawn "lutris")) []
+       [ Node (TS.TSNode "Lutris" "Open gaming platform" (spawn "lutris")) []
+       , Node (TS.TSNode "Steam" "Steam gaming platform" (spawn "steam")) []
        ]
    , Node (TS.TSNode "+ Graphics" "graphics programs" (return ()))
-       [ Node (TS.TSNode "Gimp" "GNU image manipulation program" (spawn "gimp")) []
+       [ Node (TS.TSNode "Akira" "UI/UX Design" (spawn "akira")) []
+       , Node (TS.TSNode "Darktable" "Digital Darkroom - Lightwave alternative" (spawn "darktable")) []
+       , Node (TS.TSNode "Gimp" "GNU image manipulation program" (spawn "gimp")) []
        , Node (TS.TSNode "Inkscape" "An SVG editing program" (spawn "inkscape")) []
        , Node (TS.TSNode "Krita" "Digital painting program" (spawn "krita")) []
        , Node (TS.TSNode "LibreOffice Draw" "LibreOffice drawing program" (spawn "lodraw")) []
@@ -210,7 +218,7 @@ treeselectAction a = TS.treeselectAction a
        [ Node (TS.TSNode "Discord" "Chat and video chat platform" (spawn "discord")) []
        , Node (TS.TSNode "FileZilla" "An FTP client" (spawn "filezilla")) []
        , Node (TS.TSNode "Firefox" "Open source web browser" (spawn "firefox")) []
---       , Node (TS.TSNode "Jitsi" "Open source video chat" (spawn "xxx")) []
+       , Node (TS.TSNode "Jitsi Meet Desktop" "Open source video chat" (spawn "jitsi-meet-desktop")) []
        , Node (TS.TSNode "Qutebrowser" "Minimal web browser" (spawn "qutebrowser")) []
        , Node (TS.TSNode "Transmission" "Bittorrent client" (spawn "transmission-gtk")) []
        , Node (TS.TSNode "Youtube-DL" "Download youtube videos and more" (spawn (myTerminal ++ " -e sh -c 'youtube-dl --help; bash'"))) []
@@ -218,13 +226,14 @@ treeselectAction a = TS.treeselectAction a
    , Node (TS.TSNode "+ Multimedia" "sound and video applications" (return ()))
        [ Node (TS.TSNode "Alsa Mixer" "Alsa volume control utility" (spawn (myTerminal ++ " -e alsamixer"))) []
        , Node (TS.TSNode "Audacity" "Graphical audio editing program" (spawn "audacity")) []
-       , Node (TS.TSNode "Kdenlive" "Open source non-linear video editor" (spawn "kdenlive")) []
-       , Node (TS.TSNode "OBS Studio" "Open Broadcaster Software" (spawn "obs")) []
-       , Node (TS.TSNode "VLC" "Multimedia player and server" (spawn "vlc")) []
-       , Node (TS.TSNode "MPV" "Video Player" (spawn "mpv")) []
-       , Node (TS.TSNode "Sonic Visualiser" "Waveform visualiser" (spawn "sonic-visualiser")) []
-       , Node (TS.TSNode "Natron" "Compositing for VFX and Mograph" (spawn "Natron")) []
        , Node (TS.TSNode "Blender" "Open 3D Creation Suite" (spawn "blender")) []
+       , Node (TS.TSNode "Kdenlive" "Open source non-linear video editor" (spawn "kdenlive")) []
+       , Node (TS.TSNode "LMMS" "Digital audio Workstation DAW" (spawn "lmms")) []
+       , Node (TS.TSNode "MPV" "Video Player" (spawn "mpv")) []
+       , Node (TS.TSNode "Natron" "Compositing for VFX and Mograph" (spawn "Natron")) []
+       , Node (TS.TSNode "OBS Studio" "Open Broadcaster Software" (spawn "obs")) []
+       , Node (TS.TSNode "Sonic Visualiser" "Waveform visualiser" (spawn "sonic-visualiser")) []
+       , Node (TS.TSNode "VLC" "Multimedia player and server" (spawn "vlc")) []
        ]
    , Node (TS.TSNode "+ Office" "office applications" (return ()))
        [ Node (TS.TSNode "LibreOffice" "Open source office suite" (spawn "libreoffice")) []
@@ -652,20 +661,21 @@ myManageHook = composeAll
      -- using 'doShift ( myWorkspaces !! 7)' sends program to workspace 8!
      -- I'm doing it this way because otherwise I would have to write out
      -- the full name of my workspaces.
-     [ className =? "htop"    --> doShift ( myWorkspaces !! 7 )
-     , className =? "firefox" --> doShift ( myWorkspaces !! 1 )
-     , className =? "qutebrowser" --> doShift ( myWorkspaces !! 1 )
-     , className =? "mpv"     --> doShift ( myWorkspaces !! 7 )
-     -- , className =? "vlc"     --> doShift ( myWorkspaces !! 7 )
-     , className =? "Gimp"    --> doShift ( myWorkspaces !! 8 )
-     , className =? "Gimp"    --> doFloat
-     , className =? "Inkscape"    --> doShift ( myWorkspaces !! 8 )
-     , className =? "Inkscape"    --> doFloat
-     , title =? "Krita"    --> doShift ( myWorkspaces !! 8 )
-     , title =? "Krita"    --> doFloat
-     , title =? "Oracle VM VirtualBox Manager"     --> doFloat
-     , className =? "VirtualBox Manager" --> doShift  ( myWorkspaces !! 4 )
+     [ className =? "firefox"	--> doShift ( myWorkspaces !! 1 )
      , (className =? "firefox" <&&> resource =? "Dialog") --> doFloat  -- Float Firefox Dialog
+     , className =? "qutebrowser"	--> doShift ( myWorkspaces !! 1 )
+     , className =? "VirtualBox Manager"	--> doShift ( myWorkspaces !! 4 )
+     , className =? "Jitsi Meet"	--> doShift ( myWorkspaces !! 5 )
+     , className =? "Audacity"	--> doShift ( myWorkspaces !! 6 )
+     , className =? "lmms"	--> doShift ( myWorkspaces !! 6 )
+     , className =? "Sonic Visualiser"	--> doShift ( myWorkspaces !! 6 )
+     , className =? "kdenlive"	--> doShift ( myWorkspaces !! 7 )
+     , className =? "mpv"     --> doShift ( myWorkspaces !! 7 )
+     , className =? "vlc"     --> doShift ( myWorkspaces !! 7 )
+     , className =? "Gimp"    --> doShift ( myWorkspaces !! 8 )
+     , className =? "Inkscape"    --> doShift ( myWorkspaces !! 8 )
+     , title =? "Krita"    --> doShift ( myWorkspaces !! 8 )
+     , title =? "Oracle VM VirtualBox Manager"     --> doFloat
      ] <+> namedScratchpadManageHook myScratchPads
 
 myLogHook :: X ()
