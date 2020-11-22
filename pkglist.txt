@@ -8,6 +8,8 @@ bison
 blender
 cmus
 code
+cups-pdf
+darktable
 dhcp
 discord
 exploitdb
@@ -15,7 +17,6 @@ ffmpegthumbnailer
 filezilla
 firefox
 flex
-gimp
 glances
 grub
 htop
@@ -24,9 +25,11 @@ inkscape
 kdenlive
 krita
 libreoffice-still
+lmms
 make
 metasploit
 mpv
+nfs-utils
 nitrogen
 nmap
 nmon
@@ -45,8 +48,10 @@ simple-scan
 sonic-visualiser
 steam
 transmission-gtk
+ttf-ubuntu-font-family
 ueberzug
 ufw
+unrar
 unzip
 urxvt-perls
 vifm
