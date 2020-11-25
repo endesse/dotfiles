@@ -109,6 +109,7 @@ myStartupHook = do
 	  spawnOnce "urxvtd &"
           spawnOnce "nitrogen --restore &"
           spawnOnce "picom &"
+	  spawnOnce "lxsession &"
 --          spawnOnce "nm-applet &"
 --          spawnOnce "volumeicon &"
 --          spawnOnce "trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0x282c34  --height 22 &"
@@ -253,9 +254,9 @@ treeselectAction a = TS.treeselectAction a
        [ Node (TS.TSNode "Glances" "Terminal system monitor" (spawn (myTerminal ++ " -e glances"))) []
        , Node (TS.TSNode "Gufw" "GUI uncomplicated firewall" (spawn "gufw")) []
        , Node (TS.TSNode "Htop" "Terminal process viewer" (spawn (myTerminal ++ " -e htop"))) []
-       , Node (TS.TSNode "LXAppearance" "Customize look and feel" (spawn "lxappearance")) []
        , Node (TS.TSNode "Nitrogen" "Wallpaper viewer and setter" (spawn "nitrogen")) []
        , Node (TS.TSNode "Nmon" "Network monitor" (spawn (myTerminal ++ " -e nmon"))) []
+       , Node (TS.TSNode "Stacer" "Linux System Optimizer" (spawn "stacer")) []
        , Node (TS.TSNode "Vifm" "Vim-like file manager" (spawn (myTerminal ++ " -e vifmrun"))) []
        ]
    , Node (TS.TSNode "------------------------" "" (spawn "xdotool key Escape")) []

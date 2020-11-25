@@ -19,6 +19,7 @@ firefox
 flex
 glances
 grub
+gufw
 htop
 hydra
 inkscape
@@ -26,9 +27,11 @@ kdenlive
 krita
 libreoffice-still
 lmms
+lxsession
 make
 metasploit
 mpv
+net-tools
 nfs-utils
 nitrogen
 nmap
@@ -50,7 +53,6 @@ steam
 transmission-gtk
 ttf-ubuntu-font-family
 ueberzug
-ufw
 unrar
 unzip
 urxvt-perls
