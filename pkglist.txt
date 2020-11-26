@@ -27,7 +27,8 @@ kdenlive
 krita
 libreoffice-still
 lmms
-lxsession
+lxappearance
+lxsession-gtk3
 make
 metasploit
 mpv
