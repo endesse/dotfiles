@@ -77,3 +77,9 @@ map < :!vifmimg dec<CR>
 
 command! extract! extract %a %f %n
 command! extract! extract -f %a %f %n
+
+" FILE ZIP SELECTED
+
+command! zip if [ -n "%a" ]; then
+           \     zip -r '%a.zip' %f;
+           \ fi

@@ -210,9 +210,11 @@ treeselectAction a = TS.treeselectAction a
        [ Node (TS.TSNode "Akira" "UI/UX Design" (spawn "akira")) []
        , Node (TS.TSNode "Darktable" "Digital Darkroom - Lightwave alternative" (spawn "darktable")) []
        , Node (TS.TSNode "Gimp" "GNU image manipulation program" (spawn "gimp")) []
+       , Node (TS.TSNode "Gthumb" "Image browser and viewer | Batch resizer" (spawn "gthumb")) []
        , Node (TS.TSNode "Inkscape" "An SVG editing program" (spawn "inkscape")) []
        , Node (TS.TSNode "Krita" "Digital painting program" (spawn "krita")) []
        , Node (TS.TSNode "LibreOffice Draw" "LibreOffice drawing program" (spawn "lodraw")) []
+       , Node (TS.TSNode "PureRef" "Reference Image Viewer" (spawn "PureRef")) []
        , Node (TS.TSNode "Scribus" "Desktop publishing software" (spawn "scribus")) []
        , Node (TS.TSNode "Simple Scan" "A simple scanning program" (spawn "simple-scan")) []
        ]
@@ -220,6 +222,7 @@ treeselectAction a = TS.treeselectAction a
        [ Node (TS.TSNode "Discord" "Chat and video chat platform" (spawn "discord")) []
        , Node (TS.TSNode "FileZilla" "An FTP client" (spawn "filezilla")) []
        , Node (TS.TSNode "Firefox" "Open source web browser" (spawn "firefox")) []
+       , Node (TS.TSNode "Franz" "Messaging app for multiple services" (spawn "franz")) []
        , Node (TS.TSNode "Jitsi Meet Desktop" "Open source video chat" (spawn "jitsi-meet-desktop")) []
        , Node (TS.TSNode "Qutebrowser" "Minimal web browser" (spawn "qutebrowser")) []
        , Node (TS.TSNode "Transmission" "Bittorrent client" (spawn "transmission-gtk")) []
@@ -235,6 +238,7 @@ treeselectAction a = TS.treeselectAction a
        , Node (TS.TSNode "Natron" "Compositing for VFX and Mograph" (spawn "Natron")) []
        , Node (TS.TSNode "OBS Studio" "Open Broadcaster Software" (spawn "obs")) []
        , Node (TS.TSNode "QtQR" "Creating and decoding QR codes" (spawn "qtqr")) []
+       , Node (TS.TSNode "Rhythmbox" "Music playback and management application" (spawn "rhythmbox")) []
        , Node (TS.TSNode "Sonic Visualiser" "Waveform visualiser" (spawn "sonic-visualiser")) []
        , Node (TS.TSNode "VLC" "Multimedia player and server" (spawn "vlc")) []
        ]
@@ -251,6 +255,7 @@ treeselectAction a = TS.treeselectAction a
        , Node (TS.TSNode "LibreOffice Writer" "Word processor" (spawn "lowriter")) []
        , Node (TS.TSNode "Manuskript" "Novel writing software" (spawn "manuskript")) []
        , Node (TS.TSNode "Zathura" "PDF Viewer" (spawn "zathura")) []
+       , Node (TS.TSNode "Zotero" "Collect, organize, cite, and share your research" (spawn "zotero")) []
        ]
    , Node (TS.TSNode "+ Programming" "programming and scripting tools" (return ()))
         [ Node (TS.TSNode "Python" "Python interactive prompt" (spawn (myTerminal ++ " -e python"))) []
@@ -672,6 +677,18 @@ myManageHook = composeAll
      [ className =? "firefox"	--> doShift ( myWorkspaces !! 1 )
      , (className =? "firefox" <&&> resource =? "Dialog") --> doFloat  -- Float Firefox Dialog
      , className =? "qutebrowser"	--> doShift ( myWorkspaces !! 1 )
+     , className =? "Zotero"	--> doShift ( myWorkspaces !! 3 )
+     , (className =? "Zotero" <&&> title =? "Zotero Preferences") --> doFloat
+     , (className =? "Zotero" <&&> title =? "Import") --> doFloat
+     , (className =? "Zotero" <&&> title =? "Advanced Search") --> doFloat
+     , (className =? "Zotero" <&&> title =? "My Library - Zotero Timeline") --> doFloat
+     , (className =? "Zotero" <&&> title =? "RTF Scan") --> doFloat
+     , (className =? "Zotero" <&&> title =? "Add-ons Manager") --> doFloat
+     , (className =? "Zotero" <&&> title =? "Error Console") --> doFloat
+     , (className =? "Zotero" <&&> title =? "Run JavaScript") --> doFloat
+     , (className =? "Zotero" <&&> title =? "Zotero Style Editor") --> doFloat
+     , (className =? "Zotero" <&&> title =? "Zotero Error Report") --> doFloat
+     , (className =? "Zotero" <&&> title =? "Software Update") --> doFloat
      , className =? "VirtualBox Manager"	--> doShift ( myWorkspaces !! 4 )
      , className =? "Jitsi Meet"	--> doShift ( myWorkspaces !! 5 )
      , className =? "Audacity"	--> doShift ( myWorkspaces !! 6 )
