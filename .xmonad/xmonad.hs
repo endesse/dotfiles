@@ -194,6 +194,7 @@ treeselectAction a = TS.treeselectAction a
        , Node (TS.TSNode "+ Exploit" "Tools for post exploitation" (return()))
        		[ Node (TS.TSNode "Exploit DB" "Exploit Database" (spawn (myTerminal ++ " -e sh -c 'searchsploit; bash'"))) []
        		, Node (TS.TSNode "Metasploit" "Exploit framework" (spawn (myTerminal ++ " -e msfconsole"))) []
+		, Node (TS.TSNode "Netcat" "Reverse Shell Listener" (spawn (myTerminal ++ " -e sh -c 'nc -h; bash'"))) []
 		]
        , Node (TS.TSNode "+ Wordlists" "Various wordlists for pentesting" (return()))
        		[ Node (TS.TSNode "Rockyou" "The famous Rockyou wordlist for users/passwords" (spawn (myTerminal ++ " -e vifmrun /usr/share/dict/"))) []
@@ -265,6 +266,7 @@ treeselectAction a = TS.treeselectAction a
        [ Node (TS.TSNode "Glances" "Terminal system monitor" (spawn (myTerminal ++ " -e glances"))) []
        , Node (TS.TSNode "Gufw" "GUI uncomplicated firewall" (spawn "gufw")) []
        , Node (TS.TSNode "Htop" "Terminal process viewer" (spawn (myTerminal ++ " -e htop"))) []
+       , Node (TS.TSNode "KcolorChooser" "System color picker" (spawn "kcolorchooser")) []
        , Node (TS.TSNode "LXAppearance" "Customize look and feel" (spawn "lxappearance")) []
        , Node (TS.TSNode "Nitrogen" "Wallpaper viewer and setter" (spawn "nitrogen")) []
        , Node (TS.TSNode "Nmon" "Network monitor" (spawn (myTerminal ++ " -e nmon"))) []

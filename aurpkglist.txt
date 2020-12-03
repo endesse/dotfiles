@@ -3,7 +3,9 @@ burpsuite
 dirbuster
 dirstalk
 fontpreview
+franz
 gobuster-git
+inxi
 jitsi-meet-desktop
 john-git
 lightdm-webkit-theme-aether
@@ -12,9 +14,11 @@ natron-bin
 natron-plugins
 nerd-fonts-complete
 openfx-arena
+pureref
 rockyou
 seclists-git
 stacer
 steam-fonts
 urxvt-resize-font-git
 yay-git
+zotero
