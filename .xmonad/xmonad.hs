@@ -115,7 +115,8 @@ myStartupHook = do
 --          spawnOnce "trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0x282c34  --height 22 &"
 --          spawnOnce "/usr/bin/emacs --daemon &"
           -- spawnOnce "kak -d -s mysession &"
-          setWMName "LG3D"
+          -- setWMName "LG3D"
+	  setWMName "compiz"
 
 myColorizer :: Window -> Bool -> X (String, String)
 myColorizer = colorRangeFromClassName
@@ -182,7 +183,8 @@ treeselectAction a = TS.treeselectAction a
        ]
    , Node (TS.TSNode "+ Pentest" "Pentesting tools" (return()))
        [ Node (TS.TSNode "+ Cracking" "Set of Cracking tools" (return()))
-       		[ Node (TS.TSNode "Hydra" "Fast logon cracker" (spawn (myTerminal ++ " -e sh -c 'hydra; bash'"))) []
+       		[ Node (TS.TSNode "Hashcat" "" (spawn (myTerminal ++ " -e sh -c 'hashcat --help; bash'"))) []
+		, Node (TS.TSNode "Hydra" "Fast logon cracker" (spawn (myTerminal ++ " -e sh -c 'hydra; bash'"))) []
        		, Node (TS.TSNode "John" "Hash cracking" (spawn (myTerminal ++ "  -e sh -c 'john; bash'"))) []
 		]
        , Node (TS.TSNode "+ Enumeration" "Tools for system and vulnerabilities enumerations" (return()))
@@ -190,6 +192,9 @@ treeselectAction a = TS.treeselectAction a
        		, Node (TS.TSNode "Gobuster" "Directory/file busting" (spawn (myTerminal ++ " -e sh -c 'gobuster; bash'"))) []
        		, Node (TS.TSNode "Nmap" "Enumeration" (spawn (myTerminal ++ " -e sh -c 'nmap; bash'"))) []
 		, Node (TS.TSNode "MyCli" "MySQL Enumeration tool" (spawn (myTerminal ++ " -e sh -c 'mycli --help; bash'"))) []
+		, Node (TS.TSNode "SQLMap" "Automatic SQL injection and database takeover tool" (spawn (myTerminal ++ " -e sh -c 'sqlmap; bash'"))) []
+		, Node (TS.TSNode "Wfuzz" "Utility to bruteforce web applications" (spawn (myTerminal ++ " -e sh -c 'wfuzz --help; bash'"))) []
+		, Node (TS.TSNode "OWASP ZAP" " Integrated penetration testing tool for finding vulnerabilities in web applications" (spawn "zaproxy")) []
 		]
        , Node (TS.TSNode "+ Exploit" "Tools for post exploitation" (return()))
        		[ Node (TS.TSNode "Exploit DB" "Exploit Database" (spawn (myTerminal ++ " -e sh -c 'searchsploit; bash'"))) []
@@ -228,6 +233,7 @@ treeselectAction a = TS.treeselectAction a
        , Node (TS.TSNode "Qutebrowser" "Minimal web browser" (spawn "qutebrowser")) []
        , Node (TS.TSNode "Transmission" "Bittorrent client" (spawn "transmission-gtk")) []
        , Node (TS.TSNode "Youtube-DL" "Download youtube videos and more" (spawn (myTerminal ++ " -e sh -c 'youtube-dl --help; bash'"))) []
+       , Node (TS.TSNode "Xfreerdp" "Remote desktop application" (spawn (myTerminal ++ " -e sh -c 'xfreerdp --help; bash'"))) []
        ]
    , Node (TS.TSNode "+ Multimedia" "sound and video applications" (return ()))
        [ Node (TS.TSNode "Alsa Mixer" "Alsa volume control utility" (spawn (myTerminal ++ " -e alsamixer"))) []
