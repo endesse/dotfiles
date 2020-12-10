@@ -110,6 +110,7 @@ myStartupHook = do
           spawnOnce "nitrogen --restore &"
           spawnOnce "picom &"
 	  spawnOnce "lxsession &"
+	  spawnOnce "pcmanfm -d &"
 --          spawnOnce "nm-applet &"
 --          spawnOnce "volumeicon &"
 --          spawnOnce "trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0x282c34  --height 22 &"
@@ -171,6 +172,8 @@ myAppGrid = [ ("Qutebrowser", "qutebrowser")
 		 , ("Audacity", "audacity")
 		 , ("Sonic Visualiser", "sonic-visualiser")
 		 , ("Jitsi Meet Desktop", "jitsi-meet-desktop")
+		 , ("PCmanFM", "pcmanfm")
+		 , ("MPV", "mpv --player-operation-mode=pseudo-gui")
                  ]
 
 treeselectAction :: TS.TSConfig (X ()) -> X ()
@@ -206,6 +209,7 @@ treeselectAction a = TS.treeselectAction a
 		, Node (TS.TSNode "Seclists" "A compilation of various seclists" (spawn (myTerminal ++ " -e vifmrun /usr/share/wordlists/"))) []
 		]
        , Node (TS.TSNode "Burp Suite" "Packet Injection" (spawn "burpsuite")) []
+       , Node (TS.TSNode "StegHide" "Stegnography Tool" (spawn (myTerminal ++ " -e sh -c 'steghide --help; bash'"))) []
        , Node (TS.TSNode "Wireshark" "Packet Sniffer" (spawn "wireshark")) []
        ]
    , Node (TS.TSNode "+ Games" "fun and games" (return ()))
@@ -241,7 +245,7 @@ treeselectAction a = TS.treeselectAction a
        , Node (TS.TSNode "Blender" "Open 3D Creation Suite" (spawn "blender")) []
        , Node (TS.TSNode "Kdenlive" "Open source non-linear video editor" (spawn "kdenlive")) []
        , Node (TS.TSNode "LMMS" "Digital audio Workstation DAW" (spawn "lmms")) []
-       , Node (TS.TSNode "MPV" "Video Player" (spawn "mpv")) []
+       , Node (TS.TSNode "MPV" "Video Player" (spawn "mpv --player-operation-mode=pseudo-gui")) []
        , Node (TS.TSNode "Natron" "Compositing for VFX and Mograph" (spawn "Natron")) []
        , Node (TS.TSNode "OBS Studio" "Open Broadcaster Software" (spawn "obs")) []
        , Node (TS.TSNode "QtQR" "Creating and decoding QR codes" (spawn "qtqr")) []
@@ -276,6 +280,7 @@ treeselectAction a = TS.treeselectAction a
        , Node (TS.TSNode "LXAppearance" "Customize look and feel" (spawn "lxappearance")) []
        , Node (TS.TSNode "Nitrogen" "Wallpaper viewer and setter" (spawn "nitrogen")) []
        , Node (TS.TSNode "Nmon" "Network monitor" (spawn (myTerminal ++ " -e nmon"))) []
+       , Node (TS.TSNode "PCmanFM" "GUI File manager" (spawn "pcmanfm")) []
        , Node (TS.TSNode "Stacer" "Linux System Optimizer" (spawn "stacer")) []
        , Node (TS.TSNode "Vifm" "Vim-like file manager" (spawn (myTerminal ++ " -e vifmrun"))) []
        ]
@@ -685,6 +690,7 @@ myManageHook = composeAll
      [ className =? "firefox"	--> doShift ( myWorkspaces !! 1 )
      , (className =? "firefox" <&&> resource =? "Dialog") --> doFloat  -- Float Firefox Dialog
      , className =? "qutebrowser"	--> doShift ( myWorkspaces !! 1 )
+     , (className =? "Pcmanfm" <&&> title =? "Removable medium is inserted") --> doFloat
      , className =? "Zotero"	--> doShift ( myWorkspaces !! 3 )
      , (className =? "Zotero" <&&> title =? "Zotero Preferences") --> doFloat
      , (className =? "Zotero" <&&> title =? "Import") --> doFloat
