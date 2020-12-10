@@ -24,6 +24,7 @@ glances
 grub
 gthumb
 gufw
+hashcat
 htop
 hydra
 inkscape
@@ -59,12 +60,11 @@ scribus
 scrot
 simple-scan
 sonic-visualiser
+sqlmap
 steam
 transmission-gtk
 ttf-ubuntu-font-family
 ueberzug
-unrar
-unzip
 urxvt-perls
 vifm
 virtualbox
@@ -108,4 +108,4 @@ xorg-xsetroot
 xorg-xvinfo
 xorg-xwd
 xorg-xwud
-zip
+zaproxy

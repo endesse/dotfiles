@@ -2,11 +2,15 @@ akira
 burpsuite
 dirbuster
 dirstalk
+enum4linux
 fontpreview
 franz
 gobuster-git
 inxi
+jicofo
+jitsi-meet
 jitsi-meet-desktop
+jitsi-videobridge
 john-git
 lightdm-webkit-theme-aether
 mycli
@@ -19,6 +23,8 @@ rockyou
 seclists-git
 stacer
 steam-fonts
+steghide
 urxvt-resize-font-git
+wfuzz
 yay-git
 zotero
