@@ -106,16 +106,14 @@ windowCount = gets $ Just . show . length . W.integrate' . W.stack . W.workspace
 
 myStartupHook :: X ()
 myStartupHook = do
-	  spawnOnce "urxvtd &"
+	  spawnOnce "urxvtd -q -o -f &"
           spawnOnce "nitrogen --restore &"
-          spawnOnce "picom &"
+          spawnOnce "picom --experimental-bakend &"
 	  spawnOnce "lxsession &"
 	  spawnOnce "pcmanfm -d &"
---          spawnOnce "nm-applet &"
---          spawnOnce "volumeicon &"
---          spawnOnce "trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0x282c34  --height 22 &"
---          spawnOnce "/usr/bin/emacs --daemon &"
-          -- spawnOnce "kak -d -s mysession &"
+          spawnOnce "nm-applet --no-agent &"
+          spawnOnce "volumeicon &"
+          spawnOnce "trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0x282c34  --height 24 &"
           -- setWMName "LG3D"
 	  setWMName "compiz"
 
@@ -207,15 +205,26 @@ treeselectAction a = TS.treeselectAction a
 		]
        , Node (TS.TSNode "+ Wordlists" "Various wordlists for pentesting" (return()))
        		[ Node (TS.TSNode "Rockyou" "The famous Rockyou wordlist for users/passwords" (spawn (myTerminal ++ " -e vifmrun /usr/share/dict/"))) []
-		, Node (TS.TSNode "Seclists" "A compilation of various seclists" (spawn (myTerminal ++ " -e vifmrun /usr/share/wordlists/"))) []
+		, Node (TS.TSNode "Seclists" "A compilation of various seclists" (spawn (myTerminal ++ " -e vifmrun /usr/share/seclists/"))) []
 		]
        , Node (TS.TSNode "Burp Suite" "An integrated platform for performing security testing of web applications (free edition)" (spawn "burpsuite")) []
+       , Node (TS.TSNode "Sherlock" "Hunt down social media accounts by username across social networks" (spawn (myTerminal ++ " -e sh -c 'sherlock -h; bash'"))) []
        , Node (TS.TSNode "StegHide" "Embeds a message in a file by replacing some of the least significant bits" (spawn (myTerminal ++ " -e sh -c 'steghide --help; bash'"))) []
        , Node (TS.TSNode "Wireshark" "Network traffic and protocol analyzer/sniffer" (spawn "wireshark")) []
        ]
    , Node (TS.TSNode "+ Games" "fun and games" (return ()))
-       [ Node (TS.TSNode "Lutris" "Open gaming platform" (spawn "lutris")) []
+       [ Node (TS.TSNode "0 A.D." "Cross-platform, 3D and historically-based real-time strategy game" (spawn "0ad")) []
+       , Node (TS.TSNode "Hedgewars" "Turn-based strategy artillery game similiar to Worms" (spawn "hedgewars")) []
+       , Node (TS.TSNode "Lutris" "Open gaming platform" (spawn "lutris")) []
+       , Node (TS.TSNode "Openra Command & Conquer" "An open-source implementation of the Command & Conquer" (spawn "openra-cnc")) []
+       , Node (TS.TSNode "Openra Dune 2000" "An open-source implementation of the Dune 2000" (spawn "openra-d2k")) []
+       , Node (TS.TSNode "Openra Red Alert" "An open-source implementation of the Red Alert" (spawn "openra-ra")) []
+       , Node (TS.TSNode "OpenTTD" "Open source simulation game based upon Transport Tycoon Deluxe" (spawn "openttd")) []
+       , Node (TS.TSNode "Pingus" "A Lemmings clone, i.e. a level-based puzzle game." (spawn "pingus")) []
+       , Node (TS.TSNode "Simutrans" "Transportation simulation game" (spawn "simutrans")) []
        , Node (TS.TSNode "Steam" "Steam gaming platform" (spawn "steam")) []
+       , Node (TS.TSNode "SuperTux Kart" "Kart racing game featuring Tux and his friends" (spawn "supertuxkart")) []
+       , Node (TS.TSNode "The Dark Mod" "Thief style universe using idTech4" (spawn "thedarkmod")) []
        ]
    , Node (TS.TSNode "+ Graphics" "graphics programs" (return ()))
        [ Node (TS.TSNode "Akira" "UI/UX Design" (spawn "akira")) []
@@ -235,6 +244,7 @@ treeselectAction a = TS.treeselectAction a
        , Node (TS.TSNode "Firefox" "Open source web browser" (spawn "firefox")) []
        , Node (TS.TSNode "Franz" "Messaging app for multiple services" (spawn "franz")) []
        , Node (TS.TSNode "Jitsi Meet Desktop" "Open source video chat" (spawn "jitsi-meet-desktop")) []
+       , Node (TS.TSNode "Quassel" "Next-generation distributed IRC client" (spawn "quassel")) []
        , Node (TS.TSNode "Qutebrowser" "Minimal web browser" (spawn "qutebrowser")) []
        , Node (TS.TSNode "Transmission" "Bittorrent client" (spawn "transmission-gtk")) []
        , Node (TS.TSNode "Youtube-DL" "Download youtube videos and more" (spawn (myTerminal ++ " -e sh -c 'youtube-dl --help; bash'"))) []
@@ -274,7 +284,8 @@ treeselectAction a = TS.treeselectAction a
 	, Node (TS.TSNode "Visual Studio Code" "Coding IDE from Microsoft" (spawn "code")) []
        ]
    , Node (TS.TSNode "+ System" "system tools and utilities" (return ()))
-       [ Node (TS.TSNode "Glances" "Terminal system monitor" (spawn (myTerminal ++ " -e glances"))) []
+       [ Node (TS.TSNode "Cartão de Cidadão" "Cartão Cidadão - Gov PT" (spawn "eidguiV2")) []
+       , Node (TS.TSNode "Glances" "Terminal system monitor" (spawn (myTerminal ++ " -e glances"))) []
        , Node (TS.TSNode "Gufw" "GUI uncomplicated firewall" (spawn "gufw")) []
        , Node (TS.TSNode "Htop" "Terminal process viewer" (spawn (myTerminal ++ " -e htop"))) []
        , Node (TS.TSNode "KcolorChooser" "System color picker" (spawn "kcolorchooser")) []
