@@ -108,12 +108,13 @@ myStartupHook :: X ()
 myStartupHook = do
 	  spawnOnce "urxvtd -q -o -f &"
           spawnOnce "nitrogen --restore &"
-          spawnOnce "picom --experimental-bakend &"
+          spawnOnce "picom &"
 	  spawnOnce "lxsession &"
 	  spawnOnce "pcmanfm -d &"
           spawnOnce "nm-applet --no-agent &"
           spawnOnce "volumeicon &"
-          spawnOnce "trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0x282c34  --height 24 &"
+	  spawnOnce "trayer --edge top --align right --widthtype pixel --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 0 --transparent true --alpha 0 --tint 0x282c34 --height 24 --width 150 &"
+--          spawnOnce "trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0x282c34  --height 24 &"
           -- setWMName "LG3D"
 	  setWMName "compiz"
 
