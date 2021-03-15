@@ -113,9 +113,10 @@ myStartupHook = do
 	  spawnOnce "pcmanfm -d &"
           spawnOnce "nm-applet --no-agent &"
           spawnOnce "volumeicon &"
-	  spawnOnce "trayer --edge top --align right --widthtype pixel --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 0 --transparent true --alpha 0 --tint 0x282c34 --height 24 --width 150 &"
+	  spawnOnce "trayer --edge top --align right --widthtype pixel --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0x282c34 --height 24 --width 150 &"
 --          spawnOnce "trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0x282c34  --height 24 &"
-          -- setWMName "LG3D"
+          spawnOnce "xscreensaver -nosplash &"
+	  -- setWMName "LG3D"
 	  setWMName "compiz"
 
 myColorizer :: Window -> Bool -> X (String, String)
@@ -173,15 +174,112 @@ myAppGrid = [ ("Qutebrowser", "qutebrowser")
 		 , ("Jitsi Meet Desktop", "jitsi-meet-desktop")
 		 , ("PCmanFM", "pcmanfm")
 		 , ("MPV", "mpv --player-operation-mode=pseudo-gui")
+		 , ("SynfigStudio", "synfigstudio")
+		 , ("Dust3D", "dust3d")
+		 , ("Handbreak", "ghb")
+		 , ("Ardour", "ardour6")
+		 , ("Joplin", "/opt/appimages/Joplin.AppImage")
+		 , ("Make Human", "makehuman")
+		 , ("Birdfont", "birdfont")
+		 , ("TextureLab", "/opt/texturelab030/texturelab")
+		 , ("ArmorPaint", "armorpaint")
+		 , ("FSpy", "fspy")
+		 , ("Figma-Linux", "figma-linux")
+		 , ("Davinci Resolve", "/opt/resolve/bin/resolve")
+		 , ("DigiKam", "digikam")
                  ]
 
 treeselectAction :: TS.TSConfig (X ()) -> X ()
 treeselectAction a = TS.treeselectAction a
-   [ Node (TS.TSNode "+ Accessories" "Accessory applications" (return ()))
+   [ Node (TS.TSNode "+ 3D" "3D Manipulation Software" (return ()))
+       [ Node (TS.TSNode "ArmorPaint" "ArmorPaint is a software for 3D PBR texture painting" (spawn "armourpaint")) []
+       , Node (TS.TSNode "Blender" "Open 3D Creation Suite" (spawn "blender")) []
+       , Node (TS.TSNode "Dust3D" "3D watertight modeling software" (spawn "dust3d")) []
+       , Node (TS.TSNode "FSpy" "cross platform app for still image camera matching" (spawn "fspy")) []
+       , Node (TS.TSNode "Make Human" "Parametrical modeling program for creating human bodies" (spawn "makehuman")) []
+       , Node (TS.TSNode "TextureLab" "Procedural texture generation (Substance Designer Alternative)" (spawn "/opt/texturelab030/texturelab")) []
+       ]
+   , Node (TS.TSNode "+ Accessories" "Accessory applications" (return ()))
        [ Node (TS.TSNode "Archive Manager" "Tool for archived packages" (spawn "file-roller")) []
        , Node (TS.TSNode "Calculator" "Gui version of qalc" (spawn "qalculate-gtk")) []
        , Node (TS.TSNode "Picom Toggle on/off" "Compositor for window managers" (spawn "killall picom; picom")) []
        , Node (TS.TSNode "Virtualbox" "Oracle's virtualization program" (spawn "virtualbox")) []
+       ]
+   , Node (TS.TSNode "+ Games" "fun and games" (return ()))
+       [ Node (TS.TSNode "0 A.D." "Cross-platform, 3D and historically-based real-time strategy game" (spawn "0ad")) []
+       , Node (TS.TSNode "Hedgewars" "Turn-based strategy artillery game similiar to Worms" (spawn "hedgewars")) []
+       , Node (TS.TSNode "Lutris" "Open gaming platform" (spawn "lutris")) []
+       , Node (TS.TSNode "Openra Command & Conquer" "An open-source implementation of the Command & Conquer" (spawn "openra-cnc")) []
+       , Node (TS.TSNode "Openra Dune 2000" "An open-source implementation of the Dune 2000" (spawn "openra-d2k")) []
+       , Node (TS.TSNode "Openra Red Alert" "An open-source implementation of the Red Alert" (spawn "openra-ra")) []
+       , Node (TS.TSNode "OpenTTD" "Open source simulation game based upon Transport Tycoon Deluxe" (spawn "openttd")) []
+       , Node (TS.TSNode "Pingus" "A Lemmings clone, i.e. a level-based puzzle game." (spawn "pingus")) []
+       , Node (TS.TSNode "Simutrans" "Transportation simulation game" (spawn "simutrans")) []
+       , Node (TS.TSNode "Steam" "Steam gaming platform" (spawn "steam")) []
+       , Node (TS.TSNode "SuperTux Kart" "Kart racing game featuring Tux and his friends" (spawn "supertuxkart")) []
+       , Node (TS.TSNode "The Dark Mod" "Thief style universe using idTech4" (spawn "thedarkmod")) []
+       ]
+   , Node (TS.TSNode "+ Graphics" "graphics programs" (return ()))
+       [ Node (TS.TSNode "Akira" "UI/UX Design" (spawn "akira")) []
+       , Node (TS.TSNode "Birdfont" "Font editor which can generate fonts in TTF, EOT and SVG formats" (spawn "birdfont")) []
+       , Node (TS.TSNode "Darktable" "Digital Darkroom - Lightwave alternative" (spawn "darktable")) []
+       , Node (TS.TSNode "DigiKam" "An advanced digital photo management application" (spawn "digikam")) []
+       , Node (TS.TSNode "Figma-Linux" "The collaborative interface design tool. Unofficial Figma desktop client for Linux" (spawn "figma-linux")) []
+       , Node (TS.TSNode "Gimp" "GNU image manipulation program" (spawn "gimp")) []
+       , Node (TS.TSNode "Gthumb" "Image browser and viewer | Batch resizer" (spawn "gthumb")) []
+       , Node (TS.TSNode "Inkscape" "An SVG editing program" (spawn "inkscape")) []
+       , Node (TS.TSNode "Krita" "Digital painting program" (spawn "krita")) []
+       , Node (TS.TSNode "LibreOffice Draw" "LibreOffice drawing program" (spawn "lodraw")) []
+       , Node (TS.TSNode "PureRef" "Reference Image Viewer" (spawn "PureRef")) []
+       , Node (TS.TSNode "Scribus" "Desktop publishing software" (spawn "scribus")) []
+       , Node (TS.TSNode "Simple Scan" "A simple scanning program" (spawn "simple-scan")) []
+       ]
+   , Node (TS.TSNode "+ Internet" "internet and web programs" (return ()))
+       [ Node (TS.TSNode "Discord" "Chat and video chat platform" (spawn "discord")) []
+       , Node (TS.TSNode "FileZilla" "An FTP client" (spawn "filezilla")) []
+       , Node (TS.TSNode "Firefox" "Open source web browser" (spawn "firefox")) []
+       , Node (TS.TSNode "Franz" "Messaging app for multiple services" (spawn "franz")) []
+       , Node (TS.TSNode "Jitsi Meet Desktop" "Open source video chat" (spawn "jitsi-meet-desktop")) []
+       , Node (TS.TSNode "Quassel" "Next-generation distributed IRC client" (spawn "quassel")) []
+       , Node (TS.TSNode "Qutebrowser" "Minimal web browser" (spawn "qutebrowser")) []
+       , Node (TS.TSNode "Transmission" "Bittorrent client" (spawn "transmission-gtk")) []
+       , Node (TS.TSNode "Youtube-DL" "Download youtube videos and more" (spawn (myTerminal ++ " -e sh -c 'youtube-dl --help; bash'"))) []
+       , Node (TS.TSNode "Xfreerdp" "Remote desktop application" (spawn (myTerminal ++ " -e sh -c 'xfreerdp --help; bash'"))) []
+       ]
+   , Node (TS.TSNode "+ Multimedia" "sound and video applications" (return ()))
+       [ Node (TS.TSNode "Alsa Mixer" "Alsa volume control utility" (spawn (myTerminal ++ " -e alsamixer"))) []
+       , Node (TS.TSNode "Ardour" "Professional-grade digital audio workstation" (spawn "ardour6")) []
+       , Node (TS.TSNode "Audacity" "Graphical audio editing program" (spawn "audacity")) []
+       , Node (TS.TSNode "Davinci Resolve" "Professional A/V post-production software suite from Blackmagic Design" (spawn "/opt/resolve/bin/resolve")) []
+       , Node (TS.TSNode "Handreak" "Multithreaded video transcoder" (spawn "ghb")) []
+       , Node (TS.TSNode "Kdenlive" "Open source non-linear video editor" (spawn "kdenlive")) []
+       , Node (TS.TSNode "LMMS" "Digital audio Workstation DAW" (spawn "lmms")) []
+       , Node (TS.TSNode "MPV" "Video Player" (spawn "mpv --player-operation-mode=pseudo-gui")) []
+       , Node (TS.TSNode "Natron" "Compositing for VFX and Mograph" (spawn "Natron")) []
+       , Node (TS.TSNode "OBS Studio" "Open Broadcaster Software" (spawn "obs")) []
+       , Node (TS.TSNode "QtQR" "Creating and decoding QR codes" (spawn "qtqr")) []
+       , Node (TS.TSNode "Rhythmbox" "Music playback and management application" (spawn "rhythmbox")) []
+       , Node (TS.TSNode "Sonic Visualiser" "Waveform visualiser" (spawn "sonic-visualiser")) []
+       , Node (TS.TSNode "Synfig Studio" "Professional vector animation program" (spawn "synfigstudio")) []
+       , Node (TS.TSNode "VLC" "Multimedia player and server" (spawn "vlc")) []
+       ]
+   , Node (TS.TSNode "+ Office" "office applications" (return ()))
+       [ Node (TS.TSNode "Calibre" "Ebook management application" (spawn "calibre")) []
+       , Node (TS.TSNode "GhostWriter" "Aesthetic, distraction-free Markdown editor" (spawn "ghostwriter")) []
+       , Node (TS.TSNode "Joplin" "Cross-platform note taking and to-do app" (spawn "/opt/appimages/Joplin.AppImage")) []
+       , Node (TS.TSNode "LanguageTool" "An open source language checker" (spawn "languagetool")) []
+       , Node (TS.TSNode "LibreOffice" "Open source office suite" (spawn "libreoffice")) []
+       , Node (TS.TSNode "LibreOffice Base" "Desktop database front end" (spawn "lobase")) []
+       , Node (TS.TSNode "LibreOffice Calc" "Spreadsheet program" (spawn "localc")) []
+       , Node (TS.TSNode "LibreOffice Draw" "Diagrams and sketches" (spawn "lodraw")) []
+       , Node (TS.TSNode "LibreOffice Impress" "Presentation program" (spawn "loimpress")) []
+       , Node (TS.TSNode "LibreOffice Math" "Formula editor" (spawn "lomath")) []
+       , Node (TS.TSNode "LibreOffice Writer" "Word processor" (spawn "lowriter")) []
+       , Node (TS.TSNode "Mailspring" "EMail App" (spawn "mailspring")) []
+       , Node (TS.TSNode "Manuskript" "Novel writing software" (spawn "manuskript")) []
+       , Node (TS.TSNode "MineTime" "MineTime is a modern, intuitive and smart calendar application" (spawn "minetime")) []
+       , Node (TS.TSNode "Zathura" "PDF Viewer" (spawn "zathura")) []
+       , Node (TS.TSNode "Zotero" "Collect, organize, cite, and share your research" (spawn "zotero")) []
        ]
    , Node (TS.TSNode "+ Pentest" "Pentesting tools" (return()))
        [ Node (TS.TSNode "+ Cracking" "Set of Cracking tools" (return()))
@@ -209,83 +307,17 @@ treeselectAction a = TS.treeselectAction a
 		, Node (TS.TSNode "Seclists" "A compilation of various seclists" (spawn (myTerminal ++ " -e vifmrun /usr/share/seclists/"))) []
 		]
        , Node (TS.TSNode "Burp Suite" "An integrated platform for performing security testing of web applications (free edition)" (spawn "burpsuite")) []
-       , Node (TS.TSNode "Sherlock" "Hunt down social media accounts by username across social networks" (spawn (myTerminal ++ " -e sh -c 'sherlock -h; bash'"))) []
        , Node (TS.TSNode "StegHide" "Embeds a message in a file by replacing some of the least significant bits" (spawn (myTerminal ++ " -e sh -c 'steghide --help; bash'"))) []
        , Node (TS.TSNode "Wireshark" "Network traffic and protocol analyzer/sniffer" (spawn "wireshark")) []
-       ]
-   , Node (TS.TSNode "+ Games" "fun and games" (return ()))
-       [ Node (TS.TSNode "0 A.D." "Cross-platform, 3D and historically-based real-time strategy game" (spawn "0ad")) []
-       , Node (TS.TSNode "Hedgewars" "Turn-based strategy artillery game similiar to Worms" (spawn "hedgewars")) []
-       , Node (TS.TSNode "Lutris" "Open gaming platform" (spawn "lutris")) []
-       , Node (TS.TSNode "Openra Command & Conquer" "An open-source implementation of the Command & Conquer" (spawn "openra-cnc")) []
-       , Node (TS.TSNode "Openra Dune 2000" "An open-source implementation of the Dune 2000" (spawn "openra-d2k")) []
-       , Node (TS.TSNode "Openra Red Alert" "An open-source implementation of the Red Alert" (spawn "openra-ra")) []
-       , Node (TS.TSNode "OpenTTD" "Open source simulation game based upon Transport Tycoon Deluxe" (spawn "openttd")) []
-       , Node (TS.TSNode "Pingus" "A Lemmings clone, i.e. a level-based puzzle game." (spawn "pingus")) []
-       , Node (TS.TSNode "Simutrans" "Transportation simulation game" (spawn "simutrans")) []
-       , Node (TS.TSNode "Steam" "Steam gaming platform" (spawn "steam")) []
-       , Node (TS.TSNode "SuperTux Kart" "Kart racing game featuring Tux and his friends" (spawn "supertuxkart")) []
-       , Node (TS.TSNode "The Dark Mod" "Thief style universe using idTech4" (spawn "thedarkmod")) []
-       ]
-   , Node (TS.TSNode "+ Graphics" "graphics programs" (return ()))
-       [ Node (TS.TSNode "Akira" "UI/UX Design" (spawn "akira")) []
-       , Node (TS.TSNode "Darktable" "Digital Darkroom - Lightwave alternative" (spawn "darktable")) []
-       , Node (TS.TSNode "Gimp" "GNU image manipulation program" (spawn "gimp")) []
-       , Node (TS.TSNode "Gthumb" "Image browser and viewer | Batch resizer" (spawn "gthumb")) []
-       , Node (TS.TSNode "Inkscape" "An SVG editing program" (spawn "inkscape")) []
-       , Node (TS.TSNode "Krita" "Digital painting program" (spawn "krita")) []
-       , Node (TS.TSNode "LibreOffice Draw" "LibreOffice drawing program" (spawn "lodraw")) []
-       , Node (TS.TSNode "PureRef" "Reference Image Viewer" (spawn "PureRef")) []
-       , Node (TS.TSNode "Scribus" "Desktop publishing software" (spawn "scribus")) []
-       , Node (TS.TSNode "Simple Scan" "A simple scanning program" (spawn "simple-scan")) []
-       ]
-   , Node (TS.TSNode "+ Internet" "internet and web programs" (return ()))
-       [ Node (TS.TSNode "Discord" "Chat and video chat platform" (spawn "discord")) []
-       , Node (TS.TSNode "FileZilla" "An FTP client" (spawn "filezilla")) []
-       , Node (TS.TSNode "Firefox" "Open source web browser" (spawn "firefox")) []
-       , Node (TS.TSNode "Franz" "Messaging app for multiple services" (spawn "franz")) []
-       , Node (TS.TSNode "Jitsi Meet Desktop" "Open source video chat" (spawn "jitsi-meet-desktop")) []
-       , Node (TS.TSNode "Quassel" "Next-generation distributed IRC client" (spawn "quassel")) []
-       , Node (TS.TSNode "Qutebrowser" "Minimal web browser" (spawn "qutebrowser")) []
-       , Node (TS.TSNode "Transmission" "Bittorrent client" (spawn "transmission-gtk")) []
-       , Node (TS.TSNode "Youtube-DL" "Download youtube videos and more" (spawn (myTerminal ++ " -e sh -c 'youtube-dl --help; bash'"))) []
-       , Node (TS.TSNode "Xfreerdp" "Remote desktop application" (spawn (myTerminal ++ " -e sh -c 'xfreerdp --help; bash'"))) []
-       ]
-   , Node (TS.TSNode "+ Multimedia" "sound and video applications" (return ()))
-       [ Node (TS.TSNode "Alsa Mixer" "Alsa volume control utility" (spawn (myTerminal ++ " -e alsamixer"))) []
-       , Node (TS.TSNode "Audacity" "Graphical audio editing program" (spawn "audacity")) []
-       , Node (TS.TSNode "Blender" "Open 3D Creation Suite" (spawn "blender")) []
-       , Node (TS.TSNode "Kdenlive" "Open source non-linear video editor" (spawn "kdenlive")) []
-       , Node (TS.TSNode "LMMS" "Digital audio Workstation DAW" (spawn "lmms")) []
-       , Node (TS.TSNode "MPV" "Video Player" (spawn "mpv --player-operation-mode=pseudo-gui")) []
-       , Node (TS.TSNode "Natron" "Compositing for VFX and Mograph" (spawn "Natron")) []
-       , Node (TS.TSNode "OBS Studio" "Open Broadcaster Software" (spawn "obs")) []
-       , Node (TS.TSNode "QtQR" "Creating and decoding QR codes" (spawn "qtqr")) []
-       , Node (TS.TSNode "Rhythmbox" "Music playback and management application" (spawn "rhythmbox")) []
-       , Node (TS.TSNode "Sonic Visualiser" "Waveform visualiser" (spawn "sonic-visualiser")) []
-       , Node (TS.TSNode "VLC" "Multimedia player and server" (spawn "vlc")) []
-       ]
-   , Node (TS.TSNode "+ Office" "office applications" (return ()))
-       [ Node (TS.TSNode "Calibre" "Ebook management application" (spawn "calibre")) []
-       , Node (TS.TSNode "GhostWriter" "Aesthetic, distraction-free Markdown editor" (spawn "ghostwriter")) []
-       , Node (TS.TSNode "LanguageTool" "An open source language checker" (spawn "languagetool")) []
-       , Node (TS.TSNode "LibreOffice" "Open source office suite" (spawn "libreoffice")) []
-       , Node (TS.TSNode "LibreOffice Base" "Desktop database front end" (spawn "lobase")) []
-       , Node (TS.TSNode "LibreOffice Calc" "Spreadsheet program" (spawn "localc")) []
-       , Node (TS.TSNode "LibreOffice Draw" "Diagrams and sketches" (spawn "lodraw")) []
-       , Node (TS.TSNode "LibreOffice Impress" "Presentation program" (spawn "loimpress")) []
-       , Node (TS.TSNode "LibreOffice Math" "Formula editor" (spawn "lomath")) []
-       , Node (TS.TSNode "LibreOffice Writer" "Word processor" (spawn "lowriter")) []
-       , Node (TS.TSNode "Manuskript" "Novel writing software" (spawn "manuskript")) []
-       , Node (TS.TSNode "Zathura" "PDF Viewer" (spawn "zathura")) []
-       , Node (TS.TSNode "Zotero" "Collect, organize, cite, and share your research" (spawn "zotero")) []
        ]
    , Node (TS.TSNode "+ Programming" "programming and scripting tools" (return ()))
         [ Node (TS.TSNode "Python" "Python interactive prompt" (spawn (myTerminal ++ " -e python"))) []
 	, Node (TS.TSNode "Visual Studio Code" "Coding IDE from Microsoft" (spawn "code")) []
+	, Node (TS.TSNode "Vysor" "Mirror and control your Android device" (spawn "vysor")) []
        ]
    , Node (TS.TSNode "+ System" "system tools and utilities" (return ()))
-       [ Node (TS.TSNode "Cartão de Cidadão" "Cartão Cidadão - Gov PT" (spawn "eidguiV2")) []
+       [ Node (TS.TSNode "Arandr" "Provide a simple visual front end for XRandR" (spawn "arandr")) []
+       , Node (TS.TSNode "Cartão de Cidadão" "Cartão Cidadão - Gov PT" (spawn "eidguiV2")) []
        , Node (TS.TSNode "Glances" "Terminal system monitor" (spawn (myTerminal ++ " -e glances"))) []
        , Node (TS.TSNode "Gufw" "GUI uncomplicated firewall" (spawn "gufw")) []
        , Node (TS.TSNode "Htop" "Terminal process viewer" (spawn (myTerminal ++ " -e htop"))) []
@@ -319,6 +351,9 @@ treeselectAction a = TS.treeselectAction a
                    , Node (TS.TSNode "Xmobar" "Minimal text-based status bar"  (spawn (myBrowser ++ "https://hackage.haskell.org/package/xmobar"))) []
                    ]
                ]
+	   , Node (TS.TSNode "PhotoPea" "Online Photoshop Alternative" (spawn (myBrowser ++ "https://www.photopea.com"))) []
+	   , Node (TS.TSNode "Vectr" "Online Vector Application" (spawn (myBrowser ++ "https://vectr.com"))) []
+	   , Node (TS.TSNode "Daz3D" "3D Content Library" (spawn (myBrowser ++ "https://www.daz3d.com"))) []
            ]
        , Node (TS.TSNode "+ Search and Reference" "Search engines, indices and wikis" (return ()))
            [ Node (TS.TSNode "DuckDuckGo" "Privacy-oriented search engine" (spawn (myBrowser ++ "https://duckduckgo.com/"))) []
@@ -859,8 +894,8 @@ main :: IO ()
 main = do
     -- Launching three instances of xmobar on their monitors.
     xmproc0 <- spawnPipe "xmobar -x 0 /home/endesse/.config/xmobar/xmobarrc0"
-    -- xmproc1 <- spawnPipe "xmobar -x 1 /home/dt/.config/xmobar/xmobarrc2"
-    -- xmproc2 <- spawnPipe "xmobar -x 2 /home/dt/.config/xmobar/xmobarrc1"
+    xmproc1 <- spawnPipe "xmobar -x 1 /home/endesse/.config/xmobar/xmobarrc1"
+    -- xmproc2 <- spawnPipe "xmobar -x 2 /home/dt/.config/xmobar/xmobarrc2"
     -- the xmonad, ya know...what the WM is named after!
     xmonad $ ewmh def
         { manageHook = ( isFullscreen --> doFullFloat ) <+> myManageHook <+> manageDocks
@@ -883,7 +918,7 @@ main = do
         , logHook = workspaceHistoryHook <+> myLogHook <+> dynamicLogWithPP xmobarPP
                         { 
 			-- ppOutput = \x -> hPutStrLn xmproc0 x  >> hPutStrLn xmproc1 x  >> hPutStrLn xmproc2 x
-                        ppOutput = \x -> hPutStrLn xmproc0 x
+                        ppOutput = \x -> hPutStrLn xmproc0 x >> hPutStrLn xmproc1 x
 			, ppCurrent = xmobarColor "#98be65" "" . wrap "[" "]" -- Current workspace in xmobar
                         , ppVisible = xmobarColor "#98be65" ""                -- Visible but not current workspace
                         , ppHidden = xmobarColor "#82AAFF" "" . wrap "*" ""   -- Hidden workspaces in xmobar
