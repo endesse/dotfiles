@@ -1,6 +1,5 @@
   -- Base
 import XMonad
-import System.IO (hPutStrLn)
 import System.Exit (exitSuccess)
 import qualified XMonad.StackSet as W
 
@@ -24,14 +23,12 @@ import Data.Tree
 import qualified Data.Map as M
 
     -- Hooks
-import XMonad.Hooks.DynamicLog (dynamicLogWithPP, wrap, xmobarPP, xmobarColor, shorten, PP(..))
+-- import XMonad.Hooks.DynamicLog (dynamicLogWithPP, wrap, shorten, PP(..))
 import XMonad.Hooks.EwmhDesktops  -- for some fullscreen events, also for xcomposite in obs.
 import XMonad.Hooks.FadeInactive
-import XMonad.Hooks.ManageDocks (avoidStruts, docksEventHook, manageDocks, ToggleStruts(..))
-import XMonad.Hooks.ManageHelpers (isFullscreen, doFullFloat)
+import XMonad.Hooks.ManageDocks (avoidStruts, docks, docksEventHook, ToggleStruts(..))
 import XMonad.Hooks.ServerMode
 import XMonad.Hooks.SetWMName
-import XMonad.Hooks.WorkspaceHistory
 
     -- Layouts
 import XMonad.Layout.GridVariants (Grid(Grid))
@@ -69,8 +66,15 @@ import Control.Arrow (first)
    -- Utilities
 import XMonad.Util.EZConfig (additionalKeysP)
 import XMonad.Util.NamedScratchpad
-import XMonad.Util.Run (runProcessWithInput, safeSpawn, spawnPipe)
+import XMonad.Util.Run (runProcessWithInput, safeSpawn)
 import XMonad.Util.SpawnOnce
+
+------------------------------------------------------------------------
+-- VARIABLES
+------------------------------------------------------------------------
+-- It's nice to assign values to stuff that you will use more than once
+-- in the config. Setting values for things like font, terminal and editor
+-- means you only have to change the value here to make changes globally.
 
 myFont :: String
 myFont = "xft:Mononoki Nerd Font:bold:size=9:antialias=true:hinting=true"
@@ -101,23 +105,51 @@ myFocusColor  = "#bbc5ff"  -- Border color of focused windows
 altMask :: KeyMask
 altMask = mod1Mask         -- Setting this for use in xprompts
 
-windowCount :: X (Maybe String)
-windowCount = gets $ Just . show . length . W.integrate' . W.stack . W.workspace . W.current . windowset
+-- Colors for polybar
+color1, color2, color3, color4 :: String
+--color1 = "#7F7F7F"
+--color2 = "#c792ea"
+--color3 = "#900000"
+--color4 = "#2E9AFE"
+color1 = "#FF5722" -- Inactive
+color2 = "#FF8A65" -- Window Status
+color3 = "#FF7043"
+color4 = "#FFAB91" -- Active
+
+
+------------------------------------------------------------------------
+-- AUTOSTART
+------------------------------------------------------------------------
 
 myStartupHook :: X ()
 myStartupHook = do
+	  spawnOnce "wal -n -R -q &"
 	  spawnOnce "urxvtd -q -o -f &"
+	  spawnOnce "numlockx &"
           spawnOnce "nitrogen --restore &"
           spawnOnce "picom &"
 	  spawnOnce "lxsession &"
 	  spawnOnce "pcmanfm -d &"
           spawnOnce "nm-applet --no-agent &"
           spawnOnce "volumeicon &"
-	  spawnOnce "trayer --edge top --align right --widthtype pixel --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0x282c34 --height 24 --width 150 &"
---          spawnOnce "trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0x282c34  --height 24 &"
           spawnOnce "xscreensaver -nosplash &"
-	  -- setWMName "LG3D"
-	  setWMName "compiz"
+	  spawnOnce "birdtray &"
+	  spawnOnce "imwheel &"
+	  spawnOnce "~/.config/polybar/launch.sh &"
+	  -- TT Office
+	  --spawnOnce "anydesk &"
+	  --spawnOnce "skypeforlinux &"
+	  --spawnOnce "firefox &"
+	  --
+	  --setWMName "compiz"
+	  setWMName "LG3D"
+
+
+------------------------------------------------------------------------
+-- GRID SELECT
+------------------------------------------------------------------------
+-- GridSelect displays items (programs, open windows, etc.) in a 2D grid
+-- and lets the user select from it with the cursor/hjkl keys or the mouse.
 
 myColorizer :: Window -> Bool -> X (String, String)
 myColorizer = colorRangeFromClassName
@@ -154,7 +186,6 @@ myAppGrid = [ ("Qutebrowser", "qutebrowser")
                  , ("Gimp", "gimp")
 		 , ("Krita", "krita")
 		 , ("Inkscape", "inkscape")
-                 , ("Kdenlive", "kdenlive")
                  , ("LibreOffice Impress", "loimpress")
 		 , ("LibreOffice Calc", "localc")
                  , ("LibreOffice Writer", "lowriter")
@@ -165,83 +196,91 @@ myAppGrid = [ ("Qutebrowser", "qutebrowser")
 		 , ("Visual Studio Code", "code")
 		 , ("Blender", "blender")
 		 , ("Natron", "Natron")
-		 , ("Lutris", "lutris")
-		 , ("Akira", "akira")
-		 , ("Darktable", "darktable")
-		 , ("LMMS", "lmms")
-		 , ("Audacity", "audacity")
-		 , ("Sonic Visualiser", "sonic-visualiser")
-		 , ("Jitsi Meet Desktop", "jitsi-meet-desktop")
 		 , ("PCmanFM", "pcmanfm")
-		 , ("MPV", "mpv --player-operation-mode=pseudo-gui")
-		 , ("SynfigStudio", "synfigstudio")
-		 , ("Dust3D", "dust3d")
-		 , ("Handbreak", "ghb")
-		 , ("Ardour", "ardour6")
-		 , ("Joplin", "/opt/appimages/Joplin.AppImage")
-		 , ("Make Human", "makehuman")
-		 , ("Birdfont", "birdfont")
-		 , ("TextureLab", "/opt/texturelab030/texturelab")
-		 , ("ArmorPaint", "armorpaint")
-		 , ("FSpy", "fspy")
-		 , ("Figma-Linux", "figma-linux")
+		 , ("Joplin", "joplin-desktop")
 		 , ("Davinci Resolve", "/opt/resolve/bin/resolve")
 		 , ("DigiKam", "digikam")
+		 , ("Fluent Reader", "fluent-reader")
                  ]
 
 treeselectAction :: TS.TSConfig (X ()) -> X ()
 treeselectAction a = TS.treeselectAction a
    [ Node (TS.TSNode "+ 3D" "3D Manipulation Software" (return ()))
-       [ Node (TS.TSNode "ArmorPaint" "ArmorPaint is a software for 3D PBR texture painting" (spawn "armourpaint")) []
+       [ Node (TS.TSNode "ArmorPaint" "ArmorPaint is a software for 3D PBR texture painting" (spawn "armorpaint")) []
        , Node (TS.TSNode "Blender" "Open 3D Creation Suite" (spawn "blender")) []
        , Node (TS.TSNode "Dust3D" "3D watertight modeling software" (spawn "dust3d")) []
+       , Node (TS.TSNode "FreeCAD" "General purpose 3D CAD modeler" (spawn "freecad")) []
        , Node (TS.TSNode "FSpy" "cross platform app for still image camera matching" (spawn "fspy")) []
+       , Node (TS.TSNode "Goxel" "3D program that lets you create voxel volumes" (spawn "goxel")) []
        , Node (TS.TSNode "Make Human" "Parametrical modeling program for creating human bodies" (spawn "makehuman")) []
-       , Node (TS.TSNode "TextureLab" "Procedural texture generation (Substance Designer Alternative)" (spawn "/opt/texturelab030/texturelab")) []
+       , Node (TS.TSNode "Quixel Bridge" "A tool for browsing, searching, downloading, importing and exporting Megascans assets" (spawn "quixel-bridge")) []
+       , Node (TS.TSNode "TextureLab" "Procedural texture generation (Substance Designer Alternative)" (spawn "/opt/texturelab_030/texturelab")) []
        ]
    , Node (TS.TSNode "+ Accessories" "Accessory applications" (return ()))
        [ Node (TS.TSNode "Archive Manager" "Tool for archived packages" (spawn "file-roller")) []
+       , Node (TS.TSNode "Bottles" "Easily manage wine and proton prefix" (spawn "bottles")) []
        , Node (TS.TSNode "Calculator" "Gui version of qalc" (spawn "qalculate-gtk")) []
+       , Node (TS.TSNode "Carla" "Audio Plugin Host" (spawn "carla")) []
+       , Node (TS.TSNode "CopyQ" "Clipboard manager with searchable and editable history" (spawn "copyq")) []
+       , Node (TS.TSNode "Deckboard" "Streamdeck alternative - Create macros and launch them on mobile devices" (spawn "deckboard")) []
+       , Node (TS.TSNode "Goverlay" "A GUI to help manage Vulkan/OpenGL overlays" (spawn "goverlay")) []
+       , Node (TS.TSNode "ImWheel" "Mouse wheel configuration tool for XFree86/Xorg" (spawn (myTerminal ++ " -e sh -c 'imwheel -h; bash'"))) []
+       , Node (TS.TSNode "InklingReader" "A GNU/Linux-friendly version of the Wacom Inkling SketchManager." (spawn "inklingreader")) []
+       , Node (TS.TSNode "k3b" "Feature-rich and easy to handle CD burning application" (spawn "k3b")) []
+       , Node (TS.TSNode "OpenRGB" "Configuration utility for RGB lights supporting motherboards, RAM, & peripherals" (spawn "openrgb")) []
+       , Node (TS.TSNode "Pensela" "Screen annotation tool" (spawn "pensela")) []
        , Node (TS.TSNode "Picom Toggle on/off" "Compositor for window managers" (spawn "killall picom; picom")) []
+       , Node (TS.TSNode "PureRef" "Reference Image Viewer" (spawn "PureRef")) []
+       , Node (TS.TSNode "RivalCFG" "CLI tool and Python library to configure SteelSeries gaming mice" (spawn (myTerminal ++ " -e sh -c 'rivalcfg --help; bash'"))) []
        , Node (TS.TSNode "Virtualbox" "Oracle's virtualization program" (spawn "virtualbox")) []
        ]
    , Node (TS.TSNode "+ Games" "fun and games" (return ()))
        [ Node (TS.TSNode "0 A.D." "Cross-platform, 3D and historically-based real-time strategy game" (spawn "0ad")) []
+       , Node (TS.TSNode "Dungeon Revealer" "Web app for tabletop gaming to allow the DM to reveal areas of the game map to players" (spawn (myTerminal ++ " -e sh -c 'dungeon-revealer; bash'"))) []
+       , Node (TS.TSNode "Endless Sky" "A sandbox-style space exploration and combat game" (spawn "endless-sky")) []
        , Node (TS.TSNode "Hedgewars" "Turn-based strategy artillery game similiar to Worms" (spawn "hedgewars")) []
+       , Node (TS.TSNode "Heroic" "HGL, a Native alternative Linux Launcher for Epic Games" (spawn "heroic")) []
        , Node (TS.TSNode "Lutris" "Open gaming platform" (spawn "lutris")) []
        , Node (TS.TSNode "Openra Command & Conquer" "An open-source implementation of the Command & Conquer" (spawn "openra-cnc")) []
        , Node (TS.TSNode "Openra Dune 2000" "An open-source implementation of the Dune 2000" (spawn "openra-d2k")) []
        , Node (TS.TSNode "Openra Red Alert" "An open-source implementation of the Red Alert" (spawn "openra-ra")) []
        , Node (TS.TSNode "OpenTTD" "Open source simulation game based upon Transport Tycoon Deluxe" (spawn "openttd")) []
        , Node (TS.TSNode "Pingus" "A Lemmings clone, i.e. a level-based puzzle game." (spawn "pingus")) []
+       , Node (TS.TSNode "Rare" "A GUI for legendary, an open source replacement for Epic Games Launcher" (spawn "rare")) []
        , Node (TS.TSNode "Simutrans" "Transportation simulation game" (spawn "simutrans")) []
        , Node (TS.TSNode "Steam" "Steam gaming platform" (spawn "steam")) []
        , Node (TS.TSNode "SuperTux Kart" "Kart racing game featuring Tux and his friends" (spawn "supertuxkart")) []
        , Node (TS.TSNode "The Dark Mod" "Thief style universe using idTech4" (spawn "thedarkmod")) []
+       , Node (TS.TSNode "The Lost Vikings" "Blizzard's The Lost Vikings" (spawn "dosbox /opt/VIKINGS/VIKINGS/VIKINGS.EXE")) []
+       , Node (TS.TSNode "Xonotic" "A free, fast-paced crossplatform first-person shooter" (spawn "xonotic-sdl")) []
        ]
    , Node (TS.TSNode "+ Graphics" "graphics programs" (return ()))
        [ Node (TS.TSNode "Akira" "UI/UX Design" (spawn "akira")) []
        , Node (TS.TSNode "Birdfont" "Font editor which can generate fonts in TTF, EOT and SVG formats" (spawn "birdfont")) []
        , Node (TS.TSNode "Darktable" "Digital Darkroom - Lightwave alternative" (spawn "darktable")) []
        , Node (TS.TSNode "DigiKam" "An advanced digital photo management application" (spawn "digikam")) []
-       , Node (TS.TSNode "Figma-Linux" "The collaborative interface design tool. Unofficial Figma desktop client for Linux" (spawn "figma-linux")) []
+       , Node (TS.TSNode "Enve" "2D animation software" (spawn "enve")) []
        , Node (TS.TSNode "Gimp" "GNU image manipulation program" (spawn "gimp")) []
        , Node (TS.TSNode "Gthumb" "Image browser and viewer | Batch resizer" (spawn "gthumb")) []
        , Node (TS.TSNode "Inkscape" "An SVG editing program" (spawn "inkscape")) []
        , Node (TS.TSNode "Krita" "Digital painting program" (spawn "krita")) []
-       , Node (TS.TSNode "LibreOffice Draw" "LibreOffice drawing program" (spawn "lodraw")) []
-       , Node (TS.TSNode "PureRef" "Reference Image Viewer" (spawn "PureRef")) []
        , Node (TS.TSNode "Scribus" "Desktop publishing software" (spawn "scribus")) []
        , Node (TS.TSNode "Simple Scan" "A simple scanning program" (spawn "simple-scan")) []
+       , Node (TS.TSNode "Valentina" "Sewing pattern drafting tool aiming to remake the garment industry" (spawn "valentina")) []
        ]
    , Node (TS.TSNode "+ Internet" "internet and web programs" (return ()))
        [ Node (TS.TSNode "Discord" "Chat and video chat platform" (spawn "discord")) []
+       , Node (TS.TSNode "Exodus" "Bitcoin wallet" (spawn "exodus")) []
        , Node (TS.TSNode "FileZilla" "An FTP client" (spawn "filezilla")) []
        , Node (TS.TSNode "Firefox" "Open source web browser" (spawn "firefox")) []
-       , Node (TS.TSNode "Franz" "Messaging app for multiple services" (spawn "franz")) []
+       , Node (TS.TSNode "Hexchat" "A popular and easy to use graphical IRC (chat) client" (spawn "hexchat")) []
        , Node (TS.TSNode "Jitsi Meet Desktop" "Open source video chat" (spawn "jitsi-meet-desktop")) []
+       , Node (TS.TSNode "LBRY" "LBRY is a blockchain-based file-sharing and payment network that powers decentralized platforms" (spawn "/opt/lbry-desktop/dist/electron/LBRY_0.51.2.AppImage")) []
        , Node (TS.TSNode "Quassel" "Next-generation distributed IRC client" (spawn "quassel")) []
        , Node (TS.TSNode "Qutebrowser" "Minimal web browser" (spawn "qutebrowser")) []
+       , Node (TS.TSNode "Skype" "Skype for Linux" (spawn "skypeforlinux")) []
+       , Node (TS.TSNode "Tangram" "Run web apps on your desktop" (spawn "tangram")) []
+       , Node (TS.TSNode "Microsoft Teams" "Microsoft Teams for Linux" (spawn "teams")) []
        , Node (TS.TSNode "Transmission" "Bittorrent client" (spawn "transmission-gtk")) []
        , Node (TS.TSNode "Youtube-DL" "Download youtube videos and more" (spawn (myTerminal ++ " -e sh -c 'youtube-dl --help; bash'"))) []
        , Node (TS.TSNode "Xfreerdp" "Remote desktop application" (spawn (myTerminal ++ " -e sh -c 'xfreerdp --help; bash'"))) []
@@ -250,23 +289,32 @@ treeselectAction a = TS.treeselectAction a
        [ Node (TS.TSNode "Alsa Mixer" "Alsa volume control utility" (spawn (myTerminal ++ " -e alsamixer"))) []
        , Node (TS.TSNode "Ardour" "Professional-grade digital audio workstation" (spawn "ardour6")) []
        , Node (TS.TSNode "Audacity" "Graphical audio editing program" (spawn "audacity")) []
+       , Node (TS.TSNode "Blanket" "Improve focus and increase your productivity by listening to different sounds." (spawn "blanket")) []
        , Node (TS.TSNode "Davinci Resolve" "Professional A/V post-production software suite from Blackmagic Design" (spawn "/opt/resolve/bin/resolve")) []
+       , Node (TS.TSNode "Deskreen" "Turns any device with a web browser to a second screen for your computer" (spawn "deskreen")) []
        , Node (TS.TSNode "Handreak" "Multithreaded video transcoder" (spawn "ghb")) []
        , Node (TS.TSNode "Kdenlive" "Open source non-linear video editor" (spawn "kdenlive")) []
        , Node (TS.TSNode "LMMS" "Digital audio Workstation DAW" (spawn "lmms")) []
        , Node (TS.TSNode "MPV" "Video Player" (spawn "mpv --player-operation-mode=pseudo-gui")) []
        , Node (TS.TSNode "Natron" "Compositing for VFX and Mograph" (spawn "Natron")) []
        , Node (TS.TSNode "OBS Studio" "Open Broadcaster Software" (spawn "obs")) []
+       , Node (TS.TSNode "Photofilmstrip" "Create video clips from photos" (spawn "photofilmstrip")) []
        , Node (TS.TSNode "QtQR" "Creating and decoding QR codes" (spawn "qtqr")) []
        , Node (TS.TSNode "Rhythmbox" "Music playback and management application" (spawn "rhythmbox")) []
+       , Node (TS.TSNode "Shutter Encoder" "Converter for all formats video|audio|image professionnals codecs and standards - swiss knife tool for Linux" (spawn "shutter-encoder")) []
        , Node (TS.TSNode "Sonic Visualiser" "Waveform visualiser" (spawn "sonic-visualiser")) []
+       , Node (TS.TSNode "Subtitld" "An open source software to create, edit and transcribe subtitles." (spawn "subtitld")) []
        , Node (TS.TSNode "Synfig Studio" "Professional vector animation program" (spawn "synfigstudio")) []
+       , Node (TS.TSNode "Termv" "A terminal iptv player written in bash" (spawn (myTerminal ++ " -e sh -c 'termv; bash'"))) []
+       , Node (TS.TSNode "Vimix" "Live Video Mixing" (spawn "vimix")) []
        , Node (TS.TSNode "VLC" "Multimedia player and server" (spawn "vlc")) []
        ]
    , Node (TS.TSNode "+ Office" "office applications" (return ()))
        [ Node (TS.TSNode "Calibre" "Ebook management application" (spawn "calibre")) []
+       , Node (TS.TSNode "Fluent Reader" "Modern desktop RSS reader built with Electron, React, and Fluent UI" (spawn "fluent-reader")) []
        , Node (TS.TSNode "GhostWriter" "Aesthetic, distraction-free Markdown editor" (spawn "ghostwriter")) []
-       , Node (TS.TSNode "Joplin" "Cross-platform note taking and to-do app" (spawn "/opt/appimages/Joplin.AppImage")) []
+       , Node (TS.TSNode "GimageReader" "Qt front-end to tesseract-ocr (OCR from images or PDF)" (spawn "gimagereader-qt5")) []
+       , Node (TS.TSNode "Joplin" "Cross-platform note taking and to-do app" (spawn "joplin-desktop")) []
        , Node (TS.TSNode "LanguageTool" "An open source language checker" (spawn "languagetool")) []
        , Node (TS.TSNode "LibreOffice" "Open source office suite" (spawn "libreoffice")) []
        , Node (TS.TSNode "LibreOffice Base" "Desktop database front end" (spawn "lobase")) []
@@ -275,9 +323,8 @@ treeselectAction a = TS.treeselectAction a
        , Node (TS.TSNode "LibreOffice Impress" "Presentation program" (spawn "loimpress")) []
        , Node (TS.TSNode "LibreOffice Math" "Formula editor" (spawn "lomath")) []
        , Node (TS.TSNode "LibreOffice Writer" "Word processor" (spawn "lowriter")) []
-       , Node (TS.TSNode "Mailspring" "EMail App" (spawn "mailspring")) []
        , Node (TS.TSNode "Manuskript" "Novel writing software" (spawn "manuskript")) []
-       , Node (TS.TSNode "MineTime" "MineTime is a modern, intuitive and smart calendar application" (spawn "minetime")) []
+       , Node (TS.TSNode "Thunderbird" "Standalone mail and news reader from mozilla.org" (spawn "thunderbird")) []
        , Node (TS.TSNode "Zathura" "PDF Viewer" (spawn "zathura")) []
        , Node (TS.TSNode "Zotero" "Collect, organize, cite, and share your research" (spawn "zotero")) []
        ]
@@ -303,17 +350,26 @@ treeselectAction a = TS.treeselectAction a
 		, Node (TS.TSNode "Netcat" "TCP/IP swiss army knife." (spawn (myTerminal ++ " -e sh -c 'nc -h; bash'"))) []
 		]
        , Node (TS.TSNode "+ Wordlists" "Various wordlists for pentesting" (return()))
-       		[ Node (TS.TSNode "Rockyou" "The famous Rockyou wordlist for users/passwords" (spawn (myTerminal ++ " -e vifmrun /usr/share/dict/"))) []
+       		[ Node (TS.TSNode "Cewl" "Generate wordlists from URL" (spawn (myTerminal ++ " -e sh -c 'cewl --help; bash'"))) []
+		, Node (TS.TSNode "Curl" "Generate Wordlists" (spawn (myTerminal ++ " -e sh -c 'curl --help; bash'"))) []
+		, Node (TS.TSNode "Rockyou" "The famous Rockyou wordlist for users/passwords" (spawn (myTerminal ++ " -e vifmrun /usr/share/dict/"))) []
 		, Node (TS.TSNode "Seclists" "A compilation of various seclists" (spawn (myTerminal ++ " -e vifmrun /usr/share/seclists/"))) []
 		]
        , Node (TS.TSNode "Burp Suite" "An integrated platform for performing security testing of web applications (free edition)" (spawn "burpsuite")) []
        , Node (TS.TSNode "StegHide" "Embeds a message in a file by replacing some of the least significant bits" (spawn (myTerminal ++ " -e sh -c 'steghide --help; bash'"))) []
+       , Node (TS.TSNode "StegSeek" "Lightning fast steghide cracker" (spawn (myTerminal ++ " -e sh -c 'stegseek --help; bash'"))) []
        , Node (TS.TSNode "Wireshark" "Network traffic and protocol analyzer/sniffer" (spawn "wireshark")) []
        ]
    , Node (TS.TSNode "+ Programming" "programming and scripting tools" (return ()))
-        [ Node (TS.TSNode "Python" "Python interactive prompt" (spawn (myTerminal ++ " -e python"))) []
+        [Node (TS.TSNode "Arduino" "Arduino prototyping platform SDK" (spawn "arduino")) []
+	, Node (TS.TSNode "Fritzing" "PCB layout prototyping application" (spawn "Fritzing")) []
+	, Node (TS.TSNode "Google WebDesigner" "Create engaging, interactive HTML5-based designs and motion graphics that can run on any device." (spawn "google-webdesigner")) []
+	, Node (TS.TSNode "Glade" "User Interface Builder for GTK+ applications" (spawn "glade")) []
+	, Node (TS.TSNode "Godot" "Advanced cross-platform 2D and 3D game engine" (spawn "godot")) []
+	, Node (TS.TSNode "Python" "Python interactive prompt" (spawn (myTerminal ++ " -e python"))) []
 	, Node (TS.TSNode "Visual Studio Code" "Coding IDE from Microsoft" (spawn "code")) []
 	, Node (TS.TSNode "Vysor" "Mirror and control your Android device" (spawn "vysor")) []
+	, Node (TS.TSNode "XOD" "XOD is a visual programming language for microcontrollers." (spawn "/opt/'XOD IDE'/xod-client-electron")) []
        ]
    , Node (TS.TSNode "+ System" "system tools and utilities" (return ()))
        [ Node (TS.TSNode "Arandr" "Provide a simple visual front end for XRandR" (spawn "arandr")) []
@@ -321,10 +377,12 @@ treeselectAction a = TS.treeselectAction a
        , Node (TS.TSNode "Glances" "Terminal system monitor" (spawn (myTerminal ++ " -e glances"))) []
        , Node (TS.TSNode "Gufw" "GUI uncomplicated firewall" (spawn "gufw")) []
        , Node (TS.TSNode "Htop" "Terminal process viewer" (spawn (myTerminal ++ " -e htop"))) []
+       , Node (TS.TSNode "KDE Connect" "Adds communication between KDE and your smartphone" (spawn "kdeconnect-app")) []
        , Node (TS.TSNode "KcolorChooser" "System color picker" (spawn "kcolorchooser")) []
        , Node (TS.TSNode "LXAppearance" "Customize look and feel" (spawn "lxappearance")) []
        , Node (TS.TSNode "Nitrogen" "Wallpaper viewer and setter" (spawn "nitrogen")) []
        , Node (TS.TSNode "Nmon" "Network monitor" (spawn (myTerminal ++ " -e nmon"))) []
+       , Node (TS.TSNode "Nvidia Settings" "Tool for configuring the NVIDIA graphics driver" (spawn "nvidia-settings")) []
        , Node (TS.TSNode "PCmanFM" "GUI File manager" (spawn "pcmanfm")) []
        , Node (TS.TSNode "Stacer" "Linux System Optimizer" (spawn "stacer")) []
        , Node (TS.TSNode "Vifm" "Vim-like file manager" (spawn (myTerminal ++ " -e vifmrun"))) []
@@ -485,6 +543,10 @@ myTreeNavigation = M.fromList
     , ((mod4Mask .|. altMask, xK_n), TS.moveTo ["+ Bookmarks", "+ Linux", "+ Linux News"])
     , ((mod4Mask .|. altMask, xK_w), TS.moveTo ["+ Bookmarks", "+ Linux", "+ Window Managers"])
     ]
+
+------------------------------------------------------------------------
+-- XPROMPT SETTINGS
+------------------------------------------------------------------------
 
 dtXPConfig :: XPConfig
 dtXPConfig = def
@@ -715,20 +777,21 @@ myLayoutHook = avoidStruts $ mouseResize $ windowArrange $ T.toggleLayouts float
                                  -- ||| threeCol
                                  -- ||| threeRow
 
-xmobarEscape :: String -> String
-xmobarEscape = concatMap doubleLts
-  where
-        doubleLts '<' = "<<"
-        doubleLts x   = [x]
+------------------------------------------------------------------------
+-- WORKSPACES
+------------------------------------------------------------------------
 
 myWorkspaces :: [String]
-myWorkspaces = clickable . (map xmobarEscape)
-               -- $ ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
-               $ ["1:dev", "2:www", "3:sys", "4:doc", "5:vbox", "6:chat", "7:mus", "8:vid", "9:gfx"]
-  where
-        clickable l = [ "<action=xdotool key super+" ++ show (n) ++ "> " ++ ws ++ " </action>" |
-                      (i,ws) <- zip [1..9] l,
-                      let n = i ]
+myWorkspaces = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
+
+------------------------------------------------------------------------
+-- MANAGEHOOK
+------------------------------------------------------------------------
+-- Sets some rules for certain programs. Examples include forcing certain
+-- programs to always float, or to always appear on a certain workspace.
+-- Forcing programs to a certain workspace with a doShift requires xdotool
+-- if you are using clickable workspaces. You need the className or title
+-- of the program. Use xprop to get this info.
 
 myManageHook :: XMonad.Query (Data.Monoid.Endo WindowSet)
 myManageHook = composeAll
@@ -761,13 +824,15 @@ myManageHook = composeAll
      , className =? "vlc"     --> doShift ( myWorkspaces !! 7 )
      , className =? "Gimp"    --> doShift ( myWorkspaces !! 8 )
      , className =? "Inkscape"    --> doShift ( myWorkspaces !! 8 )
+     , className =? "pentablet" --> doShift ( myWorkspaces !! 2)
+     , className =? "pentablet"	--> doFloat
      , title =? "Krita"    --> doShift ( myWorkspaces !! 8 )
+     -- TT Ofice
+     , title =? "Anydesk"	--> doShift ( myWorkspaces !! 0 )
+     , title =? "Skype"		--> doShift ( myWorkspaces !! 1 )
+     --
      , title =? "Oracle VM VirtualBox Manager"     --> doFloat
      ] <+> namedScratchpadManageHook myScratchPads
-
-myLogHook :: X ()
-myLogHook = fadeInactiveLogHook fadeAmount
-    where fadeAmount = 1.0
 
 myKeys :: [(String, X ())]
 myKeys =
@@ -818,7 +883,7 @@ myKeys =
         , ("M-<Tab>", sendMessage NextLayout)                -- Switch to next layout
         , ("M-C-M1-<Up>", sendMessage Arrange)
         , ("M-C-M1-<Down>", sendMessage DeArrange)
-        , ("M-<Space>", sendMessage (MT.Toggle NBFULL) >> sendMessage ToggleStruts) -- Toggles noborder/full
+	, ("M-<Space>", sendMessage (MT.Toggle NBFULL) >> sendMessage ToggleStruts) -- Toggles noborder/full
         , ("M-S-<Space>", sendMessage ToggleStruts)         -- Toggles struts
         , ("M-S-n", sendMessage $ MT.Toggle NOBORDERS)      -- Toggles noborder
         , ("M-<KP_Multiply>", sendMessage (IncMasterN 1))   -- Increase number of clients in master pane
@@ -876,7 +941,8 @@ myKeys =
         , ("<XF86Mail>", runOrRaise "geary" (resource =? "thunderbird"))
         , ("<XF86Calculator>", runOrRaise "gcalctool" (resource =? "gcalctool"))
         , ("<XF86Eject>", spawn "toggleeject")
-        , ("<Print>", spawn "scrotd 0")
+	, ("<Scroll_lock>", spawn "xscreensaver-command -lock;")
+        , ("<Print>", spawn "sleep 0.2; scrot -s ~/scrot/%Y-%m-%d-@%H-%M-%S-scrot.png")
         ]
         -- Appending search engine prompts to keybindings list.
         -- Look at "search engines" section of this config for values for "k".
@@ -892,41 +958,20 @@ myKeys =
 
 main :: IO ()
 main = do
-    -- Launching three instances of xmobar on their monitors.
-    xmproc0 <- spawnPipe "xmobar -x 0 /home/endesse/.config/xmobar/xmobarrc0"
-    xmproc1 <- spawnPipe "xmobar -x 1 /home/endesse/.config/xmobar/xmobarrc1"
-    -- xmproc2 <- spawnPipe "xmobar -x 2 /home/dt/.config/xmobar/xmobarrc2"
-    -- the xmonad, ya know...what the WM is named after!
-    xmonad $ ewmh def
-        { manageHook = ( isFullscreen --> doFullFloat ) <+> myManageHook <+> manageDocks
-        -- Run xmonad commands from command line with "xmonadctl command". Commands include:
-        -- shrink, expand, next-layout, default-layout, restart-wm, xterm, kill, refresh, run,
-        -- focus-up, focus-down, swap-up, swap-down, swap-master, sink, quit-wm. You can run
-        -- "xmonadctl 0" to generate full list of commands written to ~/.xsession-errors.
-        , handleEventHook    = serverModeEventHookCmd
-                               <+> serverModeEventHook
-                               <+> serverModeEventHookF "XMONAD_PRINT" (io . putStrLn)
-                               <+> docksEventHook
-        , modMask            = myModMask
-        , terminal           = myTerminal
-        , startupHook        = myStartupHook
-        , layoutHook         = myLayoutHook
-        , workspaces         = myWorkspaces
-        , borderWidth        = myBorderWidth
-        , normalBorderColor  = myNormColor
-        , focusedBorderColor = myFocusColor
-        , logHook = workspaceHistoryHook <+> myLogHook <+> dynamicLogWithPP xmobarPP
-                        { 
-			-- ppOutput = \x -> hPutStrLn xmproc0 x  >> hPutStrLn xmproc1 x  >> hPutStrLn xmproc2 x
-                        ppOutput = \x -> hPutStrLn xmproc0 x >> hPutStrLn xmproc1 x
-			, ppCurrent = xmobarColor "#98be65" "" . wrap "[" "]" -- Current workspace in xmobar
-                        , ppVisible = xmobarColor "#98be65" ""                -- Visible but not current workspace
-                        , ppHidden = xmobarColor "#82AAFF" "" . wrap "*" ""   -- Hidden workspaces in xmobar
-                        , ppHiddenNoWindows = xmobarColor "#c792ea" ""        -- Hidden workspaces (no windows)
-                        , ppTitle = xmobarColor "#b3afc2" "" . shorten 60     -- Title of active window in xmobar
-                        , ppSep =  "<fc=#666666> <fn=2>|</fn> </fc>"                     -- Separators in xmobar
-                        , ppUrgent = xmobarColor "#C45500" "" . wrap "!" "!"  -- Urgent workspace
-                        , ppExtras  = [windowCount]                           -- # of windows current workspace
-                        , ppOrder  = \(ws:l:t:ex) -> [ws,l]++ex++[t]
-                        }
-        } `additionalKeysP` myKeys
+    xmonad $ ewmh $ docks $ defaults
+
+defaults = def
+    { handleEventHook     = serverModeEventHookCmd
+                            <+> serverModeEventHook
+                            <+> serverModeEventHookF "XMONAD_PRINT" (io . putStrLn)
+                            <+> docksEventHook
+    , modMask             = myModMask
+    , terminal            = myTerminal
+    , workspaces          = myWorkspaces
+    , layoutHook          = showWName' myShowWNameTheme $ smartBorders $ myLayoutHook
+    , normalBorderColor   = myNormColor
+    , focusedBorderColor  = myFocusColor
+    , manageHook          = myManageHook <+> manageHook def
+    , borderWidth         = myBorderWidth
+    , startupHook         = myStartupHook
+    } `additionalKeysP` myKeys
