@@ -1,0 +1,85 @@
+" Show hidden files
+
+set dotfiles
+
+" Let vifm perform file operations instead of relying on 
+" standard utilities like 'cp'. It's faster and supports progress monitoring
+
+set syscalls
+
+" Run executables with return key
+
+set norunexec
+
+" Show list of matches on tab completion in command-line mode
+
+set wildmenu
+
+" Display completions in a form of popup with descriptions of the matches
+
+set wildstyle=popup
+
+" Get the total size of selected files
+
+set statusline="  %t%= %A %10u:%-7g %15E %20d  "
+
+" IMAGE PREVIEWS
+
+fileviewer *.pdf
+        \ vifmimg pdfpreview %px %py %pw %ph %c
+        \ %pc
+        \ vifmimg clear
+
+    fileviewer *.epub
+        \ vifmimg epubpreview %px %py %pw %ph %c
+        \ %pc
+        \ vifmimg clear
+
+    fileviewer *.avi,*.mp4,*.wmv,*.dat,*.3gp,*.ogv,*.mkv,*.mpg,*.mpeg,*.vob,
+        \*.fl[icv],*.m2v,*.mov,*.webm,*.ts,*.mts,*.m4v,*.r[am],*.qt,*.divx,
+        \ vifmimg videopreview %px %py %pw %ph %c
+        \ %pc
+        \ vifmimg clear
+
+    fileviewer *.bmp,*.jpg,*.jpeg,*.png,*.xpm
+        \ vifmimg draw %px %py %pw %ph %c
+        \ %pc
+        \ vifmimg clear
+
+    fileviewer *.gif
+        \ vifmimg gifpreview %px %py %pw %ph %c
+        \ %pc
+        \ vifmimg clear
+
+    fileviewer *.ico
+        \ vifmimg magickpreview %px %py %pw %ph %c
+        \ %pc
+        \ vifmimg clear
+
+    fileviewer <audio/*>
+        \ vifmimg audiopreview %px %py %pw %ph %c
+        \ %pc
+        \ vifmimg clear
+
+    fileviewer <font/*>
+        \ vifmimg fontpreview %px %py %pw %ph %c
+        \ %pc
+        \ vifmimg clear
+
+" ICONS
+
+source /home/endesse/.vifm/favicons.vifm
+
+map > :!vifmimg inc<CR>
+map < :!vifmimg dec<CR>
+
+" FILE EXTRACTION
+
+command! extract! extract %a %f %n
+command! extract! extract -f %a %f %n
+
+" FILE ZIP SELECTED
+
+command! zip if [ -n "%a" ]; then
+           \     zip -r '%a.zip' %f;
+           \ fi
