@@ -21,7 +21,7 @@ URxvt*termName: rxvt-unicode-256color
 URxvt.scrollBar: false
 URxvt.saveLines: 2000
 URxvt.cursorColor: white
-URxvt.transparent: true
+URxvt.transparent: false
 URxvt.shading: 10
 URxvt.cursorBlink: true
 URxvt.internalBorder: 10 
